@@ -15,7 +15,7 @@ public interface AlumnoService {
 
     Alumno modificarAlumno(long idAlumno, AlumnoDto alumno);
 
-    Alumno buscarAlumno(int id);
+    Alumno buscarAlumno(long id);
 
     // ------------------------------------------------------------------------
 

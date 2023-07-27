@@ -59,7 +59,7 @@ public class Asignatura {
 
     // ------------------------------------------------------------------------
 
-    // Métodos para cursar y aprobar asignatura ----------------------------------
+    // Métodos para cursar y aprobar asignatura --------------------------------
 
     public void cursarAsignatura(){
         this.estado = EstadoAsignatura.CURSADA;

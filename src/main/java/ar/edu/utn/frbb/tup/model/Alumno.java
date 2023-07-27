@@ -1,5 +1,9 @@
 package ar.edu.utn.frbb.tup.model;
 
+import ar.edu.utn.frbb.tup.model.exception.AsignaturaInexistenteException;
+import ar.edu.utn.frbb.tup.model.exception.CorrelatividadException;
+import ar.edu.utn.frbb.tup.model.exception.EstadoIncorrectoException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,7 +12,6 @@ public class Alumno {
     // Atributos --------------------------------------------------------------
 
     private long id;
-
     private String nombre;
     private String apellido;
     private long dni;
@@ -70,18 +73,41 @@ public class Alumno {
 
     // Métodos relacionados con asignaturas -----------------------------------
 
-    public void agregarAsignatura(Asignatura asignatura){
-        this.asignaturas.add(asignatura);
+    public void aprobarAsignatura(Materia materia, int nota) throws EstadoIncorrectoException, CorrelatividadException, AsignaturaInexistenteException {
+        Asignatura asignaturaAAprobar = getAsignaturaAAprobar(materia);
+
+        for (Materia correlativa :
+                materia.getCorrelatividades()) {
+            chequearCorrelatividad(correlativa);
+        }
+
+        asignaturaAAprobar.aprobarAsignatura(nota);
+    }
+
+    private void chequearCorrelatividad(Materia correlativa) throws CorrelatividadException {
+        for (Asignatura a:
+                asignaturas) {
+            if (correlativa.getNombre().equals(a.getNombreAsignatura())) {
+                if (!EstadoAsignatura.APROBADA.equals(a.getEstado())) {
+                    throw new CorrelatividadException("La asignatura " + a.getNombreAsignatura() + " no está aprobada");
+                }
+            }
+        }
+    }
+
+    private Asignatura getAsignaturaAAprobar(Materia materia) throws AsignaturaInexistenteException {
+
+        for (Asignatura a: asignaturas) {
+            if (materia.getNombre().equals(a.getNombreAsignatura())) {
+                return a;
+            }
+        }
+
+        throw new AsignaturaInexistenteException("No se encontró la materia.");
     }
 
     public List<Asignatura> obtenerListaAsignaturas(){
         return this.asignaturas;
-    }
-
-    public void aprobarAsignatura() {
-    }
-
-    private void chequearCorrelatividad() {
     }
 
     public boolean puedeAprobar(Asignatura asignatura) {

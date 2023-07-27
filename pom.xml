@@ -10,7 +10,7 @@
 	</parent>
 
 	<groupId>ar.edu.utn.frbb.tup</groupId>
-	<artifactId>alumno-maeteria</artifactId>
+	<artifactId>alumno-materia</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>demo</name>
 	<description>Demo project for Spring Boot</description>

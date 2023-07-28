@@ -6,10 +6,10 @@ public class Profesor {
 
     // Atributos --------------------------------------------------------------
 
-    private final long id;
-    private final String nombre;
-    private final String apellido;
-    private final String titulo;
+    private long id;
+    private String nombre;
+    private String apellido;
+    private String titulo;
 
     private List<Materia> materiasDictadas;
 
@@ -17,11 +17,13 @@ public class Profesor {
 
     // Constructores ----------------------------------------------------------
 
+    public Profesor() {
+    }
+
     public Profesor(String nombre, String apellido, String titulo) {
         this.apellido = apellido;
         this.nombre = nombre;
         this.titulo = titulo;
-        this.id = generarID();
     }
 
     // ------------------------------------------------------------------------
@@ -32,16 +34,32 @@ public class Profesor {
         return id;
     }
 
+    public void setId(long id) {
+        this.id = id;
+    }
+
     public String getNombre() {
         return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
     public String getApellido() {
         return apellido;
     }
 
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
+    }
+
     public String getTitulo() {
         return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
     }
 
     // ------------------------------------------------------------------------

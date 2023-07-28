@@ -1,6 +1,5 @@
 package ar.edu.utn.frbb.tup.persistence.impl;
 
-import ar.edu.utn.frbb.tup.model.Alumno;
 import ar.edu.utn.frbb.tup.model.Profesor;
 import ar.edu.utn.frbb.tup.persistence.ProfesorDao;
 import org.springframework.stereotype.Service;
@@ -13,6 +12,8 @@ public class ProfesorDaoMemoryImpl implements ProfesorDao {
 
     // Atributos -------------------------------------------------------
 
+    private static long contadorId = 0;
+
     private static Map<Long, Profesor> repositorioProfesores = new HashMap<>();
 
     // -----------------------------------------------------------------
@@ -22,25 +23,19 @@ public class ProfesorDaoMemoryImpl implements ProfesorDao {
 
     @Override
     public Profesor saveProfesor(Profesor profesor) {
-        return null;
+        profesor.setId(contadorId++);
+        repositorioProfesores.put(profesor.getId(), profesor);
+        return profesor;
+        // return repositorioProfesores.put(profesor.getId(), profesor);
     }
 
     @Override
     public Profesor findProfesor(long idProfesor) {
-        return null;
+        return repositorioProfesores.get(idProfesor);
     }
 
     @Override
     public void deleteProfesor(long idProfesor) {
-    }
-
-    // ----------------------------------------------------------------
-
-    // Métodos varios -------------------------------------------------
-
-    @Override
-    public Profesor get(long id) {
-        return new Profesor("Luciano", "Salotto", "Lic. Ciencias Computación");
     }
 
     // ----------------------------------------------------------------

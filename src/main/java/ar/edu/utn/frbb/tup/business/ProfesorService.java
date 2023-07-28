@@ -1,12 +1,15 @@
 package ar.edu.utn.frbb.tup.business;
 
 import ar.edu.utn.frbb.tup.model.Profesor;
+import ar.edu.utn.frbb.tup.model.dto.ProfesorDto;
 
-public interface ProfesorService {
+public interface ProfesorService{
 
     // Métodos ----------------------------------------------------------------
 
-    public Profesor buscarProfesor(long id);
+    Profesor crearProfesor(ProfesorDto profesor) throws IllegalArgumentException;
+
+    Profesor buscarProfesor(long id);
 
     // ------------------------------------------------------------------------
 

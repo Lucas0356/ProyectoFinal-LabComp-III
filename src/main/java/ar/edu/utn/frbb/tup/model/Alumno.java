@@ -114,7 +114,7 @@ public class Alumno {
         return true;
     }
 
-    public void actualizarAsignatura() {
+    public void actualizarAsignatura(Asignatura a) {
     }
 
     // ------------------------------------------------------------------------

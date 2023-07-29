@@ -32,6 +32,11 @@ public class ProfesorController {
         return profesorService.modificarProfesor(id, profesorDto);
     }
 
+    @DeleteMapping("/{id}")
+    public String borrarProfesor(@PathVariable String id) throws ProfesorNotFoundException {
+        return profesorService.borrarProfesor(id);
+    }
+
     // ----------------------------------------------------------------
 
     // Métodos varios -------------------------------------------------

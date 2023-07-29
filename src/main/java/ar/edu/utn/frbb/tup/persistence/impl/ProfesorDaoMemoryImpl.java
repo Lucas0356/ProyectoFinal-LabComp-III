@@ -23,10 +23,9 @@ public class ProfesorDaoMemoryImpl implements ProfesorDao {
     // Métodos para operaciones CRUD de Profesor ----------------------
 
     @Override
-    public Profesor saveProfesor(Profesor profesor) {
+    public void saveProfesor(Profesor profesor) {
         profesor.setId(contadorId++);
         repositorioProfesores.put(profesor.getId(), profesor);
-        return profesor;
     }
 
     @Override
@@ -66,7 +65,14 @@ public class ProfesorDaoMemoryImpl implements ProfesorDao {
     }
 
     @Override
-    public void deleteProfesor(long idProfesor) {
+    public void deleteProfesor(long id) throws ProfesorNotFoundException {
+        // Verificamos si el profesor existe en el repositorio
+        if (!repositorioProfesores.containsKey(id)) {
+            throw new ProfesorNotFoundException("No se encontró ningún profesor con el ID proporcionado.");
+        }
+
+        // Borramos al profesor
+        repositorioProfesores.remove(id);
     }
 
     // ----------------------------------------------------------------

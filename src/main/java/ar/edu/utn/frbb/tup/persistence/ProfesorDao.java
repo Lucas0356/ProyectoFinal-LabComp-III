@@ -7,13 +7,13 @@ public interface ProfesorDao {
 
     // Métodos para operaciones CRUD de Profesor ----------------------
 
-    Profesor saveProfesor(Profesor profesor);
+    void saveProfesor(Profesor profesor);
 
     Profesor findProfesor(long idProfesor);
 
     Profesor updateProfesor(long id, Profesor profesor) throws ProfesorNotFoundException;
 
-    void deleteProfesor(long idProfesor);
+    void deleteProfesor(long idProfesor) throws ProfesorNotFoundException;
 
     // ----------------------------------------------------------------
 

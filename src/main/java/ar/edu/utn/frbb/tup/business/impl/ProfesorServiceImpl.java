@@ -9,8 +9,6 @@ import ar.edu.utn.frbb.tup.persistence.exception.ProfesorNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Objects;
-
 @Service
 public class ProfesorServiceImpl implements ProfesorService {
     @Autowired
@@ -60,7 +58,8 @@ public class ProfesorServiceImpl implements ProfesorService {
     }
 
     @Override
-    public Profesor modificarProfesor(String idString, ProfesorDto nuevoProfesor) throws ProfesorNotFoundException {
+    public Profesor modificarProfesor(String idString, ProfesorDto nuevoProfesor)
+            throws ProfesorNotFoundException {
         Profesor p = new Profesor(nuevoProfesor.getNombre(), nuevoProfesor.getApellido(),
                 nuevoProfesor.getTitulo());
 
@@ -73,6 +72,18 @@ public class ProfesorServiceImpl implements ProfesorService {
 
         return(profesorDao.updateProfesor(id, p));
     }
+
+    @Override
+    public String borrarProfesor(String idString) throws ProfesorNotFoundException {
+        // Verificar que el ID sea válido
+        long id = validarId(idString);
+
+        // Borramos al profesor en su id
+        profesorDao.deleteProfesor(id);
+
+        return "El profesor con el id " + id + " ha sido eliminado correctamente.";
+    }
+
 
     // ------------------------------------------------------------------------
 

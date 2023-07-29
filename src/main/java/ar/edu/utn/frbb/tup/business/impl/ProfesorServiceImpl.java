@@ -2,22 +2,34 @@ package ar.edu.utn.frbb.tup.business.impl;
 
 import ar.edu.utn.frbb.tup.business.ProfesorService;
 import ar.edu.utn.frbb.tup.business.exceptions.*;
+import ar.edu.utn.frbb.tup.model.Materia;
 import ar.edu.utn.frbb.tup.model.Profesor;
 import ar.edu.utn.frbb.tup.model.dto.ProfesorDto;
+import ar.edu.utn.frbb.tup.persistence.MateriaDao;
 import ar.edu.utn.frbb.tup.persistence.ProfesorDao;
+import ar.edu.utn.frbb.tup.persistence.exception.ListaVaciaException;
+import ar.edu.utn.frbb.tup.persistence.exception.MateriaNotFoundException;
 import ar.edu.utn.frbb.tup.persistence.exception.ProfesorNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class ProfesorServiceImpl implements ProfesorService {
     @Autowired
     private ProfesorDao profesorDao;
 
+    @Autowired
+    private MateriaDao materiaDao;
+
     // Constructor ------------------------------------------------------------
 
     public ProfesorServiceImpl(ProfesorDao profesorDao) {
         this.profesorDao = profesorDao;
+    }
+    public void MateriaServiceImpl(ProfesorDao profesorDao) {
     }
 
     // ------------------------------------------------------------------------
@@ -82,6 +94,37 @@ public class ProfesorServiceImpl implements ProfesorService {
         profesorDao.deleteProfesor(id);
 
         return "El profesor con el id " + id + " ha sido eliminado correctamente.";
+    }
+
+    @Override
+    public List<Materia> obtenerMateriasDictadasProfesor(String idString) throws ProfesorNotFoundException, ListaVaciaException {
+        // Verificar que el ID sea válido
+        long id = validarId(idString);
+
+        // Buscar al profesor por el ID
+        Profesor profesor = profesorDao.findProfesor(id);
+
+        // Obtener la lista de IDs de materias dictadas por el profesor
+        List<Integer> materiasDictadasIDs = profesor.obtenerListaMateriasDictadas();
+
+        // Crear una lista para almacenar las materias
+        List<Materia> materiasDictadas = new ArrayList<>();
+
+        // Buscar cada materia por su ID y agregarla a la lista
+        for (Integer idMateria : materiasDictadasIDs) {
+            try {
+                Materia materia = materiaDao.findMateria(idMateria);
+                materiasDictadas.add(materia);
+            } catch (MateriaNotFoundException e) {
+                // Si la materia no se encuentra en el repositorio, simplemente la omitimos
+            }
+        }
+
+        if (materiasDictadas.isEmpty()){
+            throw new ListaVaciaException("El profesor no tiene materias dictadas.");
+        }
+
+        return materiasDictadas;
     }
 
     // ------------------------------------------------------------------------

@@ -1,5 +1,6 @@
 package ar.edu.utn.frbb.tup.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Profesor {
@@ -11,19 +12,22 @@ public class Profesor {
     private String apellido;
     private String titulo;
 
-    private List<Materia> materiasDictadas;
+    private List<Integer> materiasDictadas;
 
     // ------------------------------------------------------------------------
 
     // Constructores ----------------------------------------------------------
 
     public Profesor() {
+        this.materiasDictadas = new ArrayList<>();
     }
 
     public Profesor(String nombre, String apellido, String titulo) {
         this.apellido = apellido;
         this.nombre = nombre;
         this.titulo = titulo;
+
+        this.materiasDictadas = new ArrayList<>();
     }
 
     // ------------------------------------------------------------------------
@@ -67,10 +71,12 @@ public class Profesor {
     // Métodos relacionados con materias dictadas -----------------------------
 
     public void agregarMateriaDictada(Materia materia) {
-        materiasDictadas.add(materia);
+        if (materia != null) {
+            materiasDictadas.add(materia.getMateriaId());
+        }
     }
 
-    public List<Materia> obtenerListaMateriasDictadas(){
+    public List<Integer> obtenerListaMateriasDictadas(){
         return this.materiasDictadas;
     }
 

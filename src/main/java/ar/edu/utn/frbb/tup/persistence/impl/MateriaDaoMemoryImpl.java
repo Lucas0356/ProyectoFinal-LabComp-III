@@ -43,6 +43,8 @@ public class MateriaDaoMemoryImpl implements MateriaDao {
     public Materia saveMateria(Materia materia) {
         materia.setMateriaId(contadorId++);
         repositorioMateria.put(materia.getMateriaId(), materia);
+        Profesor profesor = materia.getProfesor();
+        profesor.agregarMateriaDictada(materia);
         return materia;
     }
 

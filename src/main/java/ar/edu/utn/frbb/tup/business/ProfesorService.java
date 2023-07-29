@@ -1,8 +1,12 @@
 package ar.edu.utn.frbb.tup.business;
 
+import ar.edu.utn.frbb.tup.model.Materia;
 import ar.edu.utn.frbb.tup.model.Profesor;
 import ar.edu.utn.frbb.tup.model.dto.ProfesorDto;
+import ar.edu.utn.frbb.tup.persistence.exception.ListaVaciaException;
 import ar.edu.utn.frbb.tup.persistence.exception.ProfesorNotFoundException;
+
+import java.util.List;
 
 public interface ProfesorService{
 
@@ -15,6 +19,8 @@ public interface ProfesorService{
     Profesor modificarProfesor(String id, ProfesorDto profesor) throws ProfesorNotFoundException;
 
     String borrarProfesor(String id) throws ProfesorNotFoundException;
+
+    List<Materia> obtenerMateriasDictadasProfesor(String id) throws ProfesorNotFoundException, ListaVaciaException;
 
     // ------------------------------------------------------------------------
 

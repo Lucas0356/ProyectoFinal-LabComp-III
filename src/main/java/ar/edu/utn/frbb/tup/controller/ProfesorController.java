@@ -4,7 +4,6 @@ import ar.edu.utn.frbb.tup.business.ProfesorService;
 import ar.edu.utn.frbb.tup.model.Materia;
 import ar.edu.utn.frbb.tup.model.Profesor;
 import ar.edu.utn.frbb.tup.model.dto.ProfesorDto;
-import ar.edu.utn.frbb.tup.persistence.exception.ListaVaciaException;
 import ar.edu.utn.frbb.tup.persistence.exception.MateriaNotFoundException;
 import ar.edu.utn.frbb.tup.persistence.exception.ProfesorNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,8 +46,7 @@ public class ProfesorController {
     // Métodos varios -------------------------------------------------
 
     @GetMapping("/{id}/materias")
-    public List<Materia> obtenerMateriasDictadasProfesor(@PathVariable String id) throws ProfesorNotFoundException,
-            ListaVaciaException {
+    public List<Materia> obtenerMateriasDictadasProfesor(@PathVariable String id) throws ProfesorNotFoundException{
         return profesorService.obtenerMateriasDictadasProfesor(id);
     }
 

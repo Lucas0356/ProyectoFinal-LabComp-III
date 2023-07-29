@@ -7,13 +7,13 @@ import ar.edu.utn.frbb.tup.model.Profesor;
 import ar.edu.utn.frbb.tup.model.dto.ProfesorDto;
 import ar.edu.utn.frbb.tup.persistence.MateriaDao;
 import ar.edu.utn.frbb.tup.persistence.ProfesorDao;
-import ar.edu.utn.frbb.tup.persistence.exception.ListaVaciaException;
 import ar.edu.utn.frbb.tup.persistence.exception.MateriaNotFoundException;
 import ar.edu.utn.frbb.tup.persistence.exception.ProfesorNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -108,8 +108,7 @@ public class ProfesorServiceImpl implements ProfesorService {
     }
 
     @Override
-    public List<Materia> obtenerMateriasDictadasProfesor(String idString) throws ProfesorNotFoundException,
-            ListaVaciaException {
+    public List<Materia> obtenerMateriasDictadasProfesor(String idString) throws ProfesorNotFoundException{
         // Verificar que el ID sea válido
         long id = validarId(idString);
 
@@ -132,9 +131,13 @@ public class ProfesorServiceImpl implements ProfesorService {
             }
         }
 
-        if (materiasDictadas.isEmpty()){
-            throw new ListaVaciaException("El profesor no tiene materias dictadas.");
-        }
+        // Ordenar las materias alfabéticamente por su nombre
+        materiasDictadas.sort(new Comparator<Materia>() {
+            @Override
+            public int compare(Materia materia1, Materia materia2) {
+                return materia1.getNombre().compareToIgnoreCase(materia2.getNombre());
+            }
+        });
 
         return materiasDictadas;
     }

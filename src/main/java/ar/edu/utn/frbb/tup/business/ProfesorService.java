@@ -3,7 +3,6 @@ package ar.edu.utn.frbb.tup.business;
 import ar.edu.utn.frbb.tup.model.Materia;
 import ar.edu.utn.frbb.tup.model.Profesor;
 import ar.edu.utn.frbb.tup.model.dto.ProfesorDto;
-import ar.edu.utn.frbb.tup.persistence.exception.ListaVaciaException;
 import ar.edu.utn.frbb.tup.persistence.exception.MateriaNotFoundException;
 import ar.edu.utn.frbb.tup.persistence.exception.ProfesorNotFoundException;
 
@@ -21,7 +20,7 @@ public interface ProfesorService{
 
     String borrarProfesor(String id) throws ProfesorNotFoundException, MateriaNotFoundException;
 
-    List<Materia> obtenerMateriasDictadasProfesor(String id) throws ProfesorNotFoundException, ListaVaciaException;
+    List<Materia> obtenerMateriasDictadasProfesor(String id) throws ProfesorNotFoundException;
 
     // ------------------------------------------------------------------------
 

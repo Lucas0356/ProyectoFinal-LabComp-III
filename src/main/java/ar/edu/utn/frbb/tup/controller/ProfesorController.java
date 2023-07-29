@@ -3,6 +3,7 @@ package ar.edu.utn.frbb.tup.controller;
 import ar.edu.utn.frbb.tup.business.ProfesorService;
 import ar.edu.utn.frbb.tup.model.Profesor;
 import ar.edu.utn.frbb.tup.model.dto.ProfesorDto;
+import ar.edu.utn.frbb.tup.persistence.exception.ProfesorNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,8 +22,14 @@ public class ProfesorController {
     }
 
     @GetMapping("/{id}")
-    public Profesor buscarProfesor(@PathVariable long id) {
+    public Profesor buscarProfesor(@PathVariable String id) throws ProfesorNotFoundException {
         return profesorService.buscarProfesor(id);
+    }
+
+    @PutMapping("/{id}")
+    public Profesor modificarProfesor(@PathVariable String id, @RequestBody ProfesorDto profesorDto)
+            throws ProfesorNotFoundException {
+        return profesorService.modificarProfesor(id, profesorDto);
     }
 
     // ----------------------------------------------------------------

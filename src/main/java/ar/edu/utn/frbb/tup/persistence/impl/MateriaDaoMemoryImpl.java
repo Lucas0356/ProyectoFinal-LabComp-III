@@ -14,6 +14,8 @@ public class MateriaDaoMemoryImpl implements MateriaDao {
 
     // Atributos -------------------------------------------------------
 
+    private static int contadorId = 1;
+
     private static final Map<Integer, Materia> repositorioMateria = new HashMap<>();
 
     // ----------------------------------------------------------------
@@ -33,8 +35,7 @@ public class MateriaDaoMemoryImpl implements MateriaDao {
 
     @Override
     public Materia saveMateria(Materia materia) {
-        Random random = new Random();
-        materia.setMateriaId(random.nextInt());
+        materia.setMateriaId(contadorId++);
         repositorioMateria.put(materia.getMateriaId(), materia);
         return materia;
     }

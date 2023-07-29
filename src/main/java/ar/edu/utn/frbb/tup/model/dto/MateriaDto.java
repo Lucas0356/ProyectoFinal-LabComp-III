@@ -1,5 +1,8 @@
 package ar.edu.utn.frbb.tup.model.dto;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MateriaDto {
 
     // Atributos --------------------------------------------------------------
@@ -9,12 +12,14 @@ public class MateriaDto {
     private int cuatrimestre;
     private long profesorId;
 
+    private List<Integer> correlatividades = new ArrayList<>();
+
     // ------------------------------------------------------------------------
 
     // Getters y Setters ------------------------------------------------------
 
-    public long getProfesorId() {
-        return profesorId;
+    public String getProfesorId() {
+        return String.valueOf(profesorId);
     }
 
     public void setProfesorId(long profesorId) {
@@ -43,6 +48,14 @@ public class MateriaDto {
 
     public void setCuatrimestre(int cuatrimestre) {
         this.cuatrimestre = cuatrimestre;
+    }
+
+    public List<Integer> getCorrelatividades() {
+        return correlatividades;
+    }
+
+    public void setCorrelatividades(List<Integer> correlatividades) {
+        this.correlatividades = correlatividades;
     }
 
     // ------------------------------------------------------------------------

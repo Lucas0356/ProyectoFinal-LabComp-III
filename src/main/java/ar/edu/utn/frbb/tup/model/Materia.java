@@ -14,7 +14,7 @@ public class Materia {
     private int cuatrimestre;
     private Profesor profesor;
 
-    private List<Materia> correlatividades;
+    private List<Integer> correlatividades;
 
     // ------------------------------------------------------------------------
 
@@ -75,11 +75,11 @@ public class Materia {
         this.profesor = profesor;
     }
 
-    public List<Materia> getCorrelatividades() {
+    public List<Integer> getCorrelatividades() {
         return correlatividades;
     }
 
-    public void setCorrelatividades(List<Materia> correlatividades) {
+    public void setCorrelatividades(List<Integer> correlatividades) {
         this.correlatividades = correlatividades;
     }
 
@@ -88,7 +88,7 @@ public class Materia {
     // Métodos relacionados con correlatividades  -----------------------------
 
     public void agregarCorrelatividad(Materia materia){
-        this.correlatividades.add(materia);
+        this.correlatividades.add(materia.getMateriaId());
     }
 
     // ------------------------------------------------------------------------

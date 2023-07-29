@@ -73,6 +73,7 @@ public class Alumno {
 
     // Métodos relacionados con asignaturas -----------------------------------
 
+    /*
     public void aprobarAsignatura(Materia materia, int nota) throws EstadoIncorrectoException, CorrelatividadException, AsignaturaInexistenteException {
         Asignatura asignaturaAAprobar = getAsignaturaAAprobar(materia);
 
@@ -83,6 +84,7 @@ public class Alumno {
 
         asignaturaAAprobar.aprobarAsignatura(nota);
     }
+    */
 
     private void chequearCorrelatividad(Materia correlativa) throws CorrelatividadException {
         for (Asignatura a:

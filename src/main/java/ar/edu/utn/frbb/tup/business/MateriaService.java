@@ -11,7 +11,7 @@ public interface MateriaService {
 
     // Crear, modificar y eliminar materia ------------------------------------
 
-    Materia crearMateria(MateriaDto inputData) throws IllegalArgumentException, ProfesorNotFoundException;
+    Materia crearMateria(MateriaDto inputData) throws ProfesorNotFoundException;
 
     // ------------------------------------------------------------------------
 

@@ -84,7 +84,6 @@ public class ProfesorServiceImpl implements ProfesorService {
         return "El profesor con el id " + id + " ha sido eliminado correctamente.";
     }
 
-
     // ------------------------------------------------------------------------
 
     // Métodos auxiliares para validar datos ----------------------------------
@@ -112,9 +111,9 @@ public class ProfesorServiceImpl implements ProfesorService {
         }
     }
 
-    private void validarTitulo(String tituloMateria) throws TituloInvalidoException {
+    private void validarTitulo(String tituloProfesor) throws TituloInvalidoException {
         // Verificar que el título del profesor no esté vacío
-        if (tituloMateria == null || tituloMateria.trim().isEmpty()) {
+        if (tituloProfesor == null || tituloProfesor.trim().isEmpty()) {
             throw new TituloInvalidoException("El título del profesor no puede estar vacío.");
         }
     }

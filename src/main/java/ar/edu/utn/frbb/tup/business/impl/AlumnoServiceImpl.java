@@ -21,6 +21,7 @@ public class AlumnoServiceImpl implements AlumnoService {
     private static final AlumnoDao alumnoDao = new AlumnoDaoMemoryImpl();
     private static final AsignaturaService asignaturaService = new AsignaturaServiceImpl();
 
+    /*
     @Override
     public void aprobarAsignatura(int materiaId, int nota, long dni) throws EstadoIncorrectoException, CorrelatividadesNoAprobadasException {
         Asignatura a = asignaturaService.getAsignatura(materiaId, dni);
@@ -37,6 +38,7 @@ public class AlumnoServiceImpl implements AlumnoService {
         alumno.actualizarAsignatura(a);
         alumnoDao.saveAlumno(alumno);
     }
+    */
 
     @Override
     public void cursarAsignatura(long idAlumno, long idAsignatura) {
@@ -70,5 +72,10 @@ public class AlumnoServiceImpl implements AlumnoService {
     @Override
     public Alumno buscarAlumno(long id) {
         return null;
+    }
+
+    @Override
+    public void aprobarAsignatura(int materiaId, int nota, long dni) throws EstadoIncorrectoException, CorrelatividadesNoAprobadasException {
+
     }
 }

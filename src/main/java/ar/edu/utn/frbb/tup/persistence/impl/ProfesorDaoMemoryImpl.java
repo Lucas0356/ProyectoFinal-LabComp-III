@@ -37,7 +37,7 @@ public class ProfesorDaoMemoryImpl implements ProfesorDao {
     public Profesor updateProfesor(long id, Profesor profesorModificado) throws ProfesorNotFoundException {
         // Verificamos si el profesor existe en el repositorio
         if (!repositorioProfesores.containsKey(id)) {
-            throw new ProfesorNotFoundException("No se encontró ningún profesor con el ID proporcionado.");
+            throw new ProfesorNotFoundException("No se encontró ningún profesor con el id " + id);
         }
 
         // Obtenemos el profesor ya existente
@@ -68,7 +68,7 @@ public class ProfesorDaoMemoryImpl implements ProfesorDao {
     public void deleteProfesor(long id) throws ProfesorNotFoundException {
         // Verificamos si el profesor existe en el repositorio
         if (!repositorioProfesores.containsKey(id)) {
-            throw new ProfesorNotFoundException("No se encontró ningún profesor con el ID proporcionado.");
+            throw new ProfesorNotFoundException("No se encontró ningún profesor con el id " + id);
         }
 
         // Borramos al profesor

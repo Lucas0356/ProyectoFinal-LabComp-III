@@ -38,7 +38,8 @@ public class UtnResponseEntityExceptionHandler extends ResponseEntityExceptionHa
     // Manejar excepciones de argumentos no válidos (NombreInvalidoException, ApellidoInvalidoException,
     // TituloInvalidoException, IdInvalidoException, etc)
     @ExceptionHandler(value = {NombreInvalidoException.class, ApellidoInvalidoException.class,
-            TituloInvalidoException.class, IdInvalidoException.class, NumeroInvalidoException.class})
+            TituloInvalidoException.class, IdInvalidoException.class, NumeroInvalidoException.class,
+            AnioInvalidoException.class, CuatrimestreInvalidoException.class})
     protected ResponseEntity<Object> handleInvalidArguments(Exception ex, WebRequest request) {
         String exceptionMessage = ex.getMessage();
         CustomApiError error = new CustomApiError();

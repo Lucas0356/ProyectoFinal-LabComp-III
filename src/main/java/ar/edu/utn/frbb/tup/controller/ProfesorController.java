@@ -15,7 +15,7 @@ public class ProfesorController {
 
     // Métodos para operaciones CRUD de Profesor ----------------------
 
-    @PostMapping("/")
+    @PostMapping("")
     public Profesor crearProfesor(@RequestBody ProfesorDto profesorDto) {
         return profesorService.crearProfesor(profesorDto);
     }

@@ -2,6 +2,8 @@ package ar.edu.utn.frbb.tup.persistence.impl;
 
 import ar.edu.utn.frbb.tup.model.Alumno;
 import ar.edu.utn.frbb.tup.persistence.AlumnoDao;
+import ar.edu.utn.frbb.tup.persistence.exception.AlumnoNotFoundException;
+import ar.edu.utn.frbb.tup.persistence.exception.ProfesorNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -16,6 +18,8 @@ public class AlumnoDaoMemoryImpl implements AlumnoDao {
 
     // Atributos -------------------------------------------------------
 
+    private static long contadorId = 1;
+
     private static Map<Long, Alumno> repositorioAlumnos = new HashMap<>();
 
     // -----------------------------------------------------------------
@@ -24,21 +28,19 @@ public class AlumnoDaoMemoryImpl implements AlumnoDao {
 
     @Override
     public Alumno saveAlumno(Alumno alumno) {
-        Random random = new Random();
-        alumno.setId(random.nextLong());
-        return repositorioAlumnos.put(alumno.getDni(), alumno);
+        alumno.setId(contadorId++); // Establecer el ID del alumno
+        repositorioAlumnos.put(alumno.getId(), alumno); // Usar el ID como clave en el mapa
+        return alumno;
     }
 
     @Override
-    public Alumno findAlumno(long idAlumno) {
-        for (Alumno a: repositorioAlumnos.values()) {
-            if (a.getId() == (idAlumno)){
-                return a;
-            }
+    public Alumno findAlumno(long idAlumno) throws AlumnoNotFoundException {
+        // Verificamos si el alumno existe en el repositorio
+        if (!repositorioAlumnos.containsKey(idAlumno)) {
+            throw new AlumnoNotFoundException("No se encontró un alumno con el id " + idAlumno);
         }
-        throw new ResponseStatusException(
-                HttpStatus.NOT_FOUND, "No existe ningún alumno con ese ID."
-        );
+
+        return repositorioAlumnos.get(idAlumno);
     }
 
     @Override

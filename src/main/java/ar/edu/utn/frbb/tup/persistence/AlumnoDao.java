@@ -1,6 +1,7 @@
 package ar.edu.utn.frbb.tup.persistence;
 
 import ar.edu.utn.frbb.tup.model.Alumno;
+import ar.edu.utn.frbb.tup.persistence.exception.AlumnoNotFoundException;
 
 public interface AlumnoDao {
 
@@ -8,7 +9,7 @@ public interface AlumnoDao {
 
     Alumno saveAlumno(Alumno alumno);
 
-    Alumno findAlumno(long idAlumno);
+    Alumno findAlumno(long idAlumno) throws AlumnoNotFoundException;
 
     Alumno loadAlumno(Long dni);
 

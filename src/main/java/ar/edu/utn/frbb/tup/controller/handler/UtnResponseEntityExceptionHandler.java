@@ -1,6 +1,7 @@
 package ar.edu.utn.frbb.tup.controller.handler;
 
 import ar.edu.utn.frbb.tup.business.exceptions.*;
+import ar.edu.utn.frbb.tup.persistence.exception.AlumnoNotFoundException;
 import ar.edu.utn.frbb.tup.persistence.exception.ProfesorNotFoundException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -17,7 +18,8 @@ import ar.edu.utn.frbb.tup.persistence.exception.MateriaNotFoundException;
 public class UtnResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
     // Manejar excepción para entidades no encontradas (Materia, Profesor, etc.)
-    @ExceptionHandler(value = {MateriaNotFoundException.class, ProfesorNotFoundException.class})
+    @ExceptionHandler(value = {MateriaNotFoundException.class, ProfesorNotFoundException.class,
+    AlumnoNotFoundException.class})
     protected ResponseEntity<Object> handleEntityNotFoundException(Exception ex, WebRequest request) {
         String exceptionMessage = ex.getMessage();
         CustomApiError error = new CustomApiError();
@@ -39,7 +41,7 @@ public class UtnResponseEntityExceptionHandler extends ResponseEntityExceptionHa
     // TituloInvalidoException, IdInvalidoException, etc)
     @ExceptionHandler(value = {NombreInvalidoException.class, ApellidoInvalidoException.class,
             TituloInvalidoException.class, IdInvalidoException.class, NumeroInvalidoException.class,
-            AnioInvalidoException.class, CuatrimestreInvalidoException.class})
+            AnioInvalidoException.class, CuatrimestreInvalidoException.class, DniInvalidoException.class})
     protected ResponseEntity<Object> handleInvalidArguments(Exception ex, WebRequest request) {
         String exceptionMessage = ex.getMessage();
         CustomApiError error = new CustomApiError();

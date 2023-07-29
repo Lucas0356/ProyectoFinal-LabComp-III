@@ -76,6 +76,5 @@ public class AlumnoServiceImpl implements AlumnoService {
 
     @Override
     public void aprobarAsignatura(int materiaId, int nota, long dni) throws EstadoIncorrectoException, CorrelatividadesNoAprobadasException {
-
     }
 }

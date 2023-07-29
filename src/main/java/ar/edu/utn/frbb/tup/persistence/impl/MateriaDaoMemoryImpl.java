@@ -1,8 +1,12 @@
 package ar.edu.utn.frbb.tup.persistence.impl;
 
+import ar.edu.utn.frbb.tup.business.exceptions.IdInvalidoException;
+import ar.edu.utn.frbb.tup.business.exceptions.NumeroInvalidoException;
 import ar.edu.utn.frbb.tup.model.Materia;
+import ar.edu.utn.frbb.tup.model.Profesor;
 import ar.edu.utn.frbb.tup.persistence.MateriaDao;
 import ar.edu.utn.frbb.tup.persistence.exception.MateriaNotFoundException;
+import ar.edu.utn.frbb.tup.persistence.exception.ProfesorNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -24,13 +28,15 @@ public class MateriaDaoMemoryImpl implements MateriaDao {
 
     @Override
     public Materia findMateria(int idMateria) throws MateriaNotFoundException {
-        for (Materia materia:
-             repositorioMateria.values()) {
-            if (idMateria == materia.getMateriaId()) {
-                return materia;
-            }
+        // Buscar la materia por el ID
+        Materia materia =  repositorioMateria.get(idMateria);
+
+        // Si no encuentra la materia con el ID:
+        if (materia == null) {
+            throw new MateriaNotFoundException("No se encontró la materia con el id " + idMateria);
         }
-        throw new MateriaNotFoundException("No se encontró la materia con id " + idMateria);
+
+        return materia;
     }
 
     @Override
@@ -53,4 +59,5 @@ public class MateriaDaoMemoryImpl implements MateriaDao {
     }
 
     // ----------------------------------------------------------------
+
 }

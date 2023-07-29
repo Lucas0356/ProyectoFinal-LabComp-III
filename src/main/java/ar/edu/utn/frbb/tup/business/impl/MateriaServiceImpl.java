@@ -66,7 +66,8 @@ public class MateriaServiceImpl implements MateriaService {
     }
 
     @Override
-    public Materia getMateriaById(int idMateria) throws MateriaNotFoundException {
+    public Materia buscarMateria(String idMateriaString) throws MateriaNotFoundException {
+        int idMateria = validarIdMateria(idMateriaString);
         return materiaDao.findMateria(idMateria);
     }
 
@@ -105,6 +106,26 @@ public class MateriaServiceImpl implements MateriaService {
         if (cuatrimestre < 1 || cuatrimestre > 2) {
             throw new CuatrimestreInvalidoException("El cuatrimestre no es válido. Debe ser 1 o 2.");
         }
+    }
+
+    private int validarIdMateria(String idMateriaString) throws IdInvalidoException, NumeroInvalidoException {
+        int idMateriaInt;
+
+        // Verificar que el ID no esté vacío
+        if (idMateriaString == null || idMateriaString.trim().isEmpty()) {
+            throw new IdInvalidoException("El id no puede estar vacío.");
+        }
+
+        try {
+            idMateriaInt = Integer.parseInt(idMateriaString); // Intentar convertir la cadena en un número int
+            if (idMateriaInt <= 0) {
+                throw new IdInvalidoException("El id no es válido, debe ser un número mayor a 0.");
+            }
+        } catch (NumberFormatException e) {
+            throw new NumeroInvalidoException("El id no es válido, debe ser un número entero.");
+        }
+
+        return idMateriaInt;
     }
 
     // ------------------------------------------------------------------------

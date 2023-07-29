@@ -19,7 +19,7 @@ public interface MateriaService {
 
     List<Materia> getAllMaterias();
 
-    Materia getMateriaById(int idMateria) throws MateriaNotFoundException;
+    Materia buscarMateria(String idMateria) throws MateriaNotFoundException;
 
     // -------------------------------------------------------------------------
 }

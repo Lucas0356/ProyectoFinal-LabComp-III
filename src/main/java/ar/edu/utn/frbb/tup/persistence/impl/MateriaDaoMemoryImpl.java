@@ -49,7 +49,14 @@ public class MateriaDaoMemoryImpl implements MateriaDao {
     }
 
     @Override
-    public void deleteMateria(int idMateria) {
+    public void deleteMateria(int idMateria) throws MateriaNotFoundException {
+        // Verificamos si la materia existe en el repositorio
+        if (!repositorioMateria.containsKey(idMateria)) {
+            throw new MateriaNotFoundException("No se encontró la materia con el id " + idMateria);
+        }
+
+        // Borramos la materia
+        repositorioMateria.remove(idMateria);
     }
 
     // ----------------------------------------------------------------

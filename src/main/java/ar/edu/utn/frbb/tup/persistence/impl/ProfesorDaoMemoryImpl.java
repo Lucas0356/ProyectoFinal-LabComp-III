@@ -29,7 +29,12 @@ public class ProfesorDaoMemoryImpl implements ProfesorDao {
     }
 
     @Override
-    public Profesor findProfesor(long idProfesor) {
+    public Profesor findProfesor(long idProfesor) throws ProfesorNotFoundException {
+        // Verificamos si el profesor existe en el repositorio
+        if (!repositorioProfesores.containsKey(idProfesor)) {
+            throw new ProfesorNotFoundException("No se encontró ningún profesor con el id " + idProfesor);
+        }
+
         return repositorioProfesores.get(idProfesor);
     }
 

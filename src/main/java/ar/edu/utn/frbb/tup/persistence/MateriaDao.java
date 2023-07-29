@@ -11,7 +11,7 @@ public interface MateriaDao {
 
     Materia findMateria(int idMateria) throws MateriaNotFoundException;
 
-    void deleteMateria(int idMateria);
+    void deleteMateria(int idMateria) throws MateriaNotFoundException;
 
     // ----------------------------------------------------------------
 

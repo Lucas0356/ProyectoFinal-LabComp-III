@@ -5,6 +5,7 @@ import ar.edu.utn.frbb.tup.model.Materia;
 import ar.edu.utn.frbb.tup.model.Profesor;
 import ar.edu.utn.frbb.tup.model.dto.ProfesorDto;
 import ar.edu.utn.frbb.tup.persistence.exception.ListaVaciaException;
+import ar.edu.utn.frbb.tup.persistence.exception.MateriaNotFoundException;
 import ar.edu.utn.frbb.tup.persistence.exception.ProfesorNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -37,7 +38,7 @@ public class ProfesorController {
     }
 
     @DeleteMapping("/{id}")
-    public String borrarProfesor(@PathVariable String id) throws ProfesorNotFoundException {
+    public String borrarProfesor(@PathVariable String id) throws ProfesorNotFoundException, MateriaNotFoundException {
         return profesorService.borrarProfesor(id);
     }
 

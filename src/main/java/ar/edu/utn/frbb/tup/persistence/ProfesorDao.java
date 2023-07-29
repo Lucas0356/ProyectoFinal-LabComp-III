@@ -9,7 +9,7 @@ public interface ProfesorDao {
 
     void saveProfesor(Profesor profesor);
 
-    Profesor findProfesor(long idProfesor);
+    Profesor findProfesor(long idProfesor) throws ProfesorNotFoundException;
 
     Profesor updateProfesor(long id, Profesor profesor) throws ProfesorNotFoundException;
 

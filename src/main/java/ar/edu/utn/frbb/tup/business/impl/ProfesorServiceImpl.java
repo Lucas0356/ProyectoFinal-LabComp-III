@@ -86,18 +86,30 @@ public class ProfesorServiceImpl implements ProfesorService {
     }
 
     @Override
-    public String borrarProfesor(String idString) throws ProfesorNotFoundException {
+    public String borrarProfesor(String idString) throws ProfesorNotFoundException, MateriaNotFoundException {
         // Verificar que el ID sea válido
         long id = validarId(idString);
 
-        // Borramos al profesor en su id
+        // Obtener al profesor por el ID
+        Profesor profesor = profesorDao.findProfesor(id);
+
+        // Obtener la lista de IDs de las materias dictadas por el profesor
+        List<Integer> materiasDictadasIDs = profesor.obtenerListaMateriasDictadas();
+
+        // Eliminar cada materia dictada por el profesor
+        for (int materiaID : materiasDictadasIDs) {
+            materiaDao.deleteMateria(materiaID);
+        }
+
+        // Borramos al profesor
         profesorDao.deleteProfesor(id);
 
-        return "El profesor con el id " + id + " ha sido eliminado correctamente.";
+        return "El profesor con el id " + id + " ha sido eliminado correctamente, junto con sus materias dictadas.";
     }
 
     @Override
-    public List<Materia> obtenerMateriasDictadasProfesor(String idString) throws ProfesorNotFoundException, ListaVaciaException {
+    public List<Materia> obtenerMateriasDictadasProfesor(String idString) throws ProfesorNotFoundException,
+            ListaVaciaException {
         // Verificar que el ID sea válido
         long id = validarId(idString);
 

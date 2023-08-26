@@ -38,9 +38,9 @@ public class AlumnoController {
     }
 
     @PutMapping("/{id}")
-    public Alumno modificarProfesor(@PathVariable String id, @RequestBody ProfesorDto profesorDto)
-            throws ProfesorNotFoundException {
-        return alumnoService.modificarAlumno(id, profesorDto);
+    public Alumno modificarAlumno(@PathVariable Long id, @RequestBody AlumnoDto alumnoDto)
+            throws AlumnoNotFoundException {
+        return alumnoService.modificarAlumno(id, alumnoDto);
     }
 
     @DeleteMapping("/{id}")

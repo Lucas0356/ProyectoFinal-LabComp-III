@@ -4,7 +4,6 @@ import ar.edu.utn.frbb.tup.model.Alumno;
 import ar.edu.utn.frbb.tup.model.EstadoAsignatura;
 import ar.edu.utn.frbb.tup.model.Materia;
 import ar.edu.utn.frbb.tup.model.dto.AlumnoDto;
-import ar.edu.utn.frbb.tup.model.dto.ProfesorDto;
 import ar.edu.utn.frbb.tup.model.exception.AsignaturaInexistenteException;
 import ar.edu.utn.frbb.tup.model.exception.CorrelatividadesNoAprobadasException;
 import ar.edu.utn.frbb.tup.model.exception.EstadoIncorrectoException;
@@ -18,9 +17,7 @@ public interface AlumnoService {
 
     Alumno crearAlumno(AlumnoDto alumno, List<Materia> materiasExistentes);
 
-    void eliminarAlumno(long idAlumno);
-
-    Alumno modificarAlumno(String idAlumno, ProfesorDto alumno);
+    Alumno modificarAlumno(Long idAlumno, AlumnoDto alumno) throws AlumnoNotFoundException;
 
     Alumno buscarAlumno(String id) throws AlumnoNotFoundException;
 
@@ -39,10 +36,12 @@ public interface AlumnoService {
 
     // ------------------------------------------------------------------------
 
-    // Buscar estado asignatura -----------------------------------------------
+    // Otros métodos con relación a asignatura --------------------------------
 
     EstadoAsignatura buscarEstadoAsignatura(String idAlumno, String idAsignatura)
             throws AlumnoNotFoundException, AsignaturaInexistenteException;
+
+    void actualizarAsignaturasAlumnos(Materia materia);
 
     // ------------------------------------------------------------------------
 

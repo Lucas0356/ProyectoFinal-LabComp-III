@@ -1,14 +1,10 @@
 package ar.edu.utn.frbb.tup.persistence.impl;
 
-import ar.edu.utn.frbb.tup.model.Alumno;
-import ar.edu.utn.frbb.tup.model.Asignatura;
-import ar.edu.utn.frbb.tup.model.EstadoAsignatura;
-import ar.edu.utn.frbb.tup.model.Materia;
+import ar.edu.utn.frbb.tup.model.*;
+import ar.edu.utn.frbb.tup.model.dto.AlumnoDto;
 import ar.edu.utn.frbb.tup.model.exception.AsignaturaInexistenteException;
 import ar.edu.utn.frbb.tup.persistence.AlumnoDao;
-import ar.edu.utn.frbb.tup.persistence.MateriaDao;
 import ar.edu.utn.frbb.tup.persistence.exception.AlumnoNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -60,8 +56,35 @@ public class AlumnoDaoMemoryImpl implements AlumnoDao {
     }
 
     @Override
-    public Alumno loadAlumno(Long dni) {
-        return null;
+    public Alumno updateAlumno(long idAlumno, AlumnoDto alumnoModificado) throws AlumnoNotFoundException {
+
+        // Verificamos si el profesor existe en el repositorio
+        if (!repositorioAlumnos.containsKey(idAlumno)) {
+            throw new AlumnoNotFoundException("No se encontró ningún alumno con el id " + idAlumno);
+        }
+
+        // Obtenemos el profesor ya existente
+        Alumno alumno = repositorioAlumnos.get(idAlumno);
+
+        // Obtenemos los nuevos valores de nombre, apellido y título del alumno
+        String nuevoNombre = alumnoModificado.getNombre();
+        String nuevoApellido = alumnoModificado.getApellido();
+        long nuevoDni = alumnoModificado.getDni();
+
+        // Actualizamos los campos del alumno existente si es que no son nulos o vacíos
+        if (nuevoNombre != null && !nuevoNombre.isEmpty()) {
+            alumno.setNombre(nuevoNombre);
+        }
+
+        if (nuevoApellido != null && !nuevoApellido.isEmpty()) {
+            alumno.setApellido(nuevoApellido);
+        }
+
+        if (nuevoDni != 0) {
+            alumno.setDni(nuevoDni);
+        }
+
+        return alumno;
     }
 
     @Override
@@ -99,23 +122,16 @@ public class AlumnoDaoMemoryImpl implements AlumnoDao {
     }
 
     @Override
-    public void agregarNuevaAsignaturaAAlumnos(Asignatura nuevaAsignatura) {
+    public void actualizarAsignaturasAlumnos(Materia nuevaMateria) {
+
+        Asignatura nuevaAsignatura = new Asignatura(nuevaMateria);
 
         for (Alumno alumno : repositorioAlumnos.values()) {
             alumno.getAsignaturas().add(nuevaAsignatura);
 
             // Actualizamos el alumno en la base de datos
-            actualizarAlumno(alumno);
+            repositorioAlumnos.put(alumno.getId(), alumno);
         }
-    }
-
-    // ----------------------------------------------------------------
-
-    // Métodos auxiliares ---------------------------------------------
-
-    @Override
-    public void actualizarAlumno(Alumno alumno) {
-        repositorioAlumnos.put(alumno.getId(), alumno);
     }
 
     // ----------------------------------------------------------------

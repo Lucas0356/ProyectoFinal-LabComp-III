@@ -1,5 +1,6 @@
 package ar.edu.utn.frbb.tup.controller;
 
+import ar.edu.utn.frbb.tup.business.AlumnoService;
 import ar.edu.utn.frbb.tup.business.MateriaService;
 import ar.edu.utn.frbb.tup.model.Materia;
 import ar.edu.utn.frbb.tup.model.dto.MateriaDto;
@@ -14,12 +15,16 @@ public class MateriaController {
 
     @Autowired
     private MateriaService materiaService;
+    @Autowired
+    private AlumnoService alumnoService;
 
     // Métodos para operaciones CRUD de Materia -----------------------
 
     @PostMapping("")
     public Materia crearMateria(@RequestBody MateriaDto materiaDto) throws ProfesorNotFoundException {
-        return materiaService.crearMateria(materiaDto);
+        Materia materia = materiaService.crearMateria(materiaDto);
+        alumnoService.actualizarAsignaturasAlumnos(materia);
+        return materia;
     }
 
     @GetMapping("/{idMateria}")

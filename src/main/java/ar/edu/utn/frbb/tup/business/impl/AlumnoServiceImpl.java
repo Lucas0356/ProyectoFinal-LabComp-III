@@ -1,13 +1,12 @@
 package ar.edu.utn.frbb.tup.business.impl;
 
 import ar.edu.utn.frbb.tup.business.AlumnoService;
-import ar.edu.utn.frbb.tup.business.AsignaturaService;
 import ar.edu.utn.frbb.tup.business.exceptions.*;
 import ar.edu.utn.frbb.tup.model.Alumno;
 import ar.edu.utn.frbb.tup.model.EstadoAsignatura;
 import ar.edu.utn.frbb.tup.model.Materia;
+import ar.edu.utn.frbb.tup.model.Profesor;
 import ar.edu.utn.frbb.tup.model.dto.AlumnoDto;
-import ar.edu.utn.frbb.tup.model.dto.ProfesorDto;
 import ar.edu.utn.frbb.tup.model.exception.AsignaturaInexistenteException;
 import ar.edu.utn.frbb.tup.model.exception.CorrelatividadesNoAprobadasException;
 import ar.edu.utn.frbb.tup.model.exception.EstadoIncorrectoException;
@@ -17,7 +16,6 @@ import ar.edu.utn.frbb.tup.persistence.impl.AlumnoDaoMemoryImpl;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Random;
 
 @Component
 public class AlumnoServiceImpl implements AlumnoService {
@@ -67,11 +65,16 @@ public class AlumnoServiceImpl implements AlumnoService {
     }
 
     @Override
+    public void actualizarAsignaturasAlumnos(Materia materia) {
+        alumnoDao.actualizarAsignaturasAlumnos(materia);
+    }
+
+    @Override
     public Alumno crearAlumno(AlumnoDto alumno, List<Materia> materiasExistentes) {
         // Validamos que los datos sean correctos
         validarNombreOApellido(alumno.getNombre(), "nombre", "validarNulo");
         validarNombreOApellido(alumno.getApellido(), "apellido", "validarNulo");
-        validarDNI(String.valueOf(alumno.getDni()));
+        validarDNI(alumno.getDni());
 
         Alumno a = new Alumno();
 
@@ -95,13 +98,23 @@ public class AlumnoServiceImpl implements AlumnoService {
         return alumnoDao.findAlumno(id);
     }
 
-    @Override
-    public void eliminarAlumno(long idAlumno) {
-    }
+
 
     @Override
-    public Alumno modificarAlumno(String idAlumno, ProfesorDto alumno) {
-        return null;
+    public Alumno modificarAlumno(Long idAlumno, AlumnoDto alumnoModificado) throws AlumnoNotFoundException {
+
+        // Si los datos no son vacíos, verificamos que sean válidos.
+        if (!alumnoModificado.getNombre().isEmpty()) {
+            validarNombreOApellido(alumnoModificado.getNombre(), "nombre", "NoValidarNulo");
+        }
+        if (!alumnoModificado.getApellido().isEmpty()) {
+            validarNombreOApellido(alumnoModificado.getApellido(), "apellido", "NoValidarNulo");
+        }
+        if (alumnoModificado.getDni() != 0) {
+            validarDNI(alumnoModificado.getDni());
+        }
+
+        return(alumnoDao.updateAlumno(idAlumno , alumnoModificado));
     }
 
     @Override
@@ -138,16 +151,10 @@ public class AlumnoServiceImpl implements AlumnoService {
         }
     }
 
-    private long validarDNI(String dniString) throws DniInvalidoException, NumeroInvalidoException {
-        long DniLong;
-
-        // Verificar que el ID no esté vacío
-        if (dniString == null || dniString.trim().isEmpty()) {
-            throw new IdInvalidoException("El DNI no puede estar vacío.");
-        }
+    private long validarDNI(Long dni) throws DniInvalidoException, NumeroInvalidoException {
 
         try {
-            long dniLong = Long.parseLong(dniString); // Intentar convertir la cadena en un número long
+            String dniString = String.valueOf(dni);
 
             // Verificar que el DNI tenga exactamente 8 dígitos
             if (dniString.length() != 8) {
@@ -155,13 +162,13 @@ public class AlumnoServiceImpl implements AlumnoService {
             }
 
             // Verificar que el DNI sea un número válido (mayor que 0)
-            if (dniLong <= 0) {
+            if (dni <= 0) {
                 throw new DniInvalidoException("El DNI no es válido, debe ser un número mayor a 0.");
             }
 
-            return dniLong;
+            return dni;
         } catch (NumberFormatException e) {
-            throw new NumeroInvalidoException("El DNI no es válido, debe ser un número entero.");
+            throw new NumeroInvalidoException("El DNI no es válido.");
         }
     }
 

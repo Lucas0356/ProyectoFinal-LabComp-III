@@ -1,12 +1,11 @@
 package ar.edu.utn.frbb.tup.persistence;
 
 import ar.edu.utn.frbb.tup.model.Alumno;
-import ar.edu.utn.frbb.tup.model.Asignatura;
 import ar.edu.utn.frbb.tup.model.EstadoAsignatura;
 import ar.edu.utn.frbb.tup.model.Materia;
+import ar.edu.utn.frbb.tup.model.dto.AlumnoDto;
 import ar.edu.utn.frbb.tup.model.exception.AsignaturaInexistenteException;
 import ar.edu.utn.frbb.tup.persistence.exception.AlumnoNotFoundException;
-import ar.edu.utn.frbb.tup.persistence.exception.MateriaNotFoundException;
 
 import java.util.List;
 
@@ -18,7 +17,7 @@ public interface AlumnoDao {
 
     Alumno findAlumno(long idAlumno) throws AlumnoNotFoundException;
 
-    Alumno loadAlumno(Long dni);
+    Alumno updateAlumno(long idAlumno, AlumnoDto alumnoModificado) throws AlumnoNotFoundException;
 
     void deleteAlumno(long idAlumno);
 
@@ -35,9 +34,7 @@ public interface AlumnoDao {
     EstadoAsignatura getEstadoAsignaturaPorId(long idAlumno, long idAsignatura) throws AlumnoNotFoundException,
             AsignaturaInexistenteException;
 
-    public void agregarNuevaAsignaturaAAlumnos(Asignatura nuevaAsignatura);
-
-    public void actualizarAlumno(Alumno alumno);
+    void actualizarAsignaturasAlumnos(Materia nuevaMateria);
 
     // ----------------------------------------------------------------
 }

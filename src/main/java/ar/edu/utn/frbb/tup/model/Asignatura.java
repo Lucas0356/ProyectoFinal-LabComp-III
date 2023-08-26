@@ -1,6 +1,5 @@
 package ar.edu.utn.frbb.tup.model;
 
-
 import ar.edu.utn.frbb.tup.model.exception.EstadoIncorrectoException;
 
 import java.util.Optional;

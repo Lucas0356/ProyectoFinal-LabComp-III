@@ -1,16 +1,20 @@
 package ar.edu.utn.frbb.tup.persistence.impl;
 
 import ar.edu.utn.frbb.tup.model.Alumno;
+import ar.edu.utn.frbb.tup.model.Asignatura;
+import ar.edu.utn.frbb.tup.model.EstadoAsignatura;
+import ar.edu.utn.frbb.tup.model.Materia;
+import ar.edu.utn.frbb.tup.model.exception.AsignaturaInexistenteException;
 import ar.edu.utn.frbb.tup.persistence.AlumnoDao;
+import ar.edu.utn.frbb.tup.persistence.MateriaDao;
 import ar.edu.utn.frbb.tup.persistence.exception.AlumnoNotFoundException;
-import ar.edu.utn.frbb.tup.persistence.exception.ProfesorNotFoundException;
-import org.springframework.http.HttpStatus;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 
 @Service
@@ -27,9 +31,21 @@ public class AlumnoDaoMemoryImpl implements AlumnoDao {
     // Métodos para operaciones CRUD de Alumnos ------------------------
 
     @Override
-    public Alumno saveAlumno(Alumno alumno) {
+    public Alumno saveAlumno(Alumno alumno, List<Materia> materiasExistentes) {
+
         alumno.setId(contadorId++); // Establecer el ID del alumno
-        repositorioAlumnos.put(alumno.getId(), alumno); // Usar el ID como clave en el mapa
+
+        // Creamos una lista de asignaturas para el alumno con todas las materias
+        // existentes hasta el momento
+        List<Asignatura> asignaturas = new ArrayList<>();
+        for (Materia materia : materiasExistentes) {
+            asignaturas.add(new Asignatura(materia));
+        }
+        alumno.setAsignaturas(asignaturas);
+
+        // Usamos el ID como clave en el mapa y lo guardamos
+        repositorioAlumnos.put(alumno.getId(), alumno);
+
         return alumno;
     }
 
@@ -58,7 +74,9 @@ public class AlumnoDaoMemoryImpl implements AlumnoDao {
     // Métodos para operaciones relacionadas con asignaturas ----------
 
     @Override
-    public void cursarAsignatura(long idAlumno, int idAsignatura) {
+    public void cursarAsignatura(long idAlumno, int idAsignatura) throws AlumnoNotFoundException {
+        Alumno alumno = findAlumno(idAlumno);
+
     }
 
     @Override
@@ -67,6 +85,37 @@ public class AlumnoDaoMemoryImpl implements AlumnoDao {
 
     @Override
     public void perderRegularidadAsignatura(long idAlumno, int idAsignatura) {
+    }
+
+    @Override
+    public EstadoAsignatura getEstadoAsignaturaPorId(long idAlumno, long idAsignatura) throws AlumnoNotFoundException,
+            AsignaturaInexistenteException {
+
+        // Buscamos al alumno
+        Alumno alumno = findAlumno(idAlumno);
+
+        // Retornamos el estado de la asignatura (si existe)
+        return alumno.getEstadoAsignaturaAlumno(idAsignatura);
+    }
+
+    @Override
+    public void agregarNuevaAsignaturaAAlumnos(Asignatura nuevaAsignatura) {
+
+        for (Alumno alumno : repositorioAlumnos.values()) {
+            alumno.getAsignaturas().add(nuevaAsignatura);
+
+            // Actualizamos el alumno en la base de datos
+            actualizarAlumno(alumno);
+        }
+    }
+
+    // ----------------------------------------------------------------
+
+    // Métodos auxiliares ---------------------------------------------
+
+    @Override
+    public void actualizarAlumno(Alumno alumno) {
+        repositorioAlumnos.put(alumno.getId(), alumno);
     }
 
     // ----------------------------------------------------------------

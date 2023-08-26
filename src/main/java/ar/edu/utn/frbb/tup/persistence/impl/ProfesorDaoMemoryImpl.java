@@ -53,7 +53,7 @@ public class ProfesorDaoMemoryImpl implements ProfesorDao {
         String nuevoApellido = profesorModificado.getApellido();
         String nuevoTitulo = profesorModificado.getTitulo();
 
-        // Actualizamos los campos del profesor existente si es que no son nulos y vacíos
+        // Actualizamos los campos del profesor existente si es que no son nulos o vacíos
         if (nuevoNombre != null && !nuevoNombre.isEmpty()) {
             profesor.setNombre(nuevoNombre);
         }

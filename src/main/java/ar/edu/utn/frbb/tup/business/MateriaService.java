@@ -17,7 +17,7 @@ public interface MateriaService {
 
     // Obtener una y todas las materias ---------------------------------------
 
-    List<Materia> getAllMaterias();
+    List<Materia> obtenerTodasLasMaterias();
 
     Materia buscarMateria(String idMateria) throws MateriaNotFoundException;
 

@@ -60,8 +60,8 @@ public class MateriaServiceImpl implements MateriaService {
     // Otros métodos ----------------------------------------------------------
 
     @Override
-    public List<Materia> getAllMaterias() {
-        return null;
+    public List<Materia> obtenerTodasLasMaterias() {
+        return materiaDao.obtenerTodasLasMaterias();
     }
 
     @Override

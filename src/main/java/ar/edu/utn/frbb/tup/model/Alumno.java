@@ -2,7 +2,6 @@ package ar.edu.utn.frbb.tup.model;
 
 import ar.edu.utn.frbb.tup.model.exception.AsignaturaInexistenteException;
 import ar.edu.utn.frbb.tup.model.exception.CorrelatividadException;
-import ar.edu.utn.frbb.tup.model.exception.EstadoIncorrectoException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,9 +68,21 @@ public class Alumno {
         this.dni = dni;
     }
 
+    public List<Asignatura> getAsignaturas() {
+        return asignaturas;
+    }
+
+    public void setAsignaturas(List<Asignatura> asignaturas) {
+        this.asignaturas = asignaturas;
+    }
+
     // ------------------------------------------------------------------------
 
     // Métodos relacionados con asignaturas -----------------------------------
+
+    public void agregarAsignatura(List<Asignatura> asignaturas) {
+        this.asignaturas = asignaturas;
+    }
 
     /*
     public void aprobarAsignatura(Materia materia, int nota) throws EstadoIncorrectoException, CorrelatividadException, AsignaturaInexistenteException {
@@ -85,6 +96,20 @@ public class Alumno {
         asignaturaAAprobar.aprobarAsignatura(nota);
     }
     */
+
+    public EstadoAsignatura getEstadoAsignaturaAlumno(long idAsignatura) throws AsignaturaInexistenteException {
+
+        // Buscamos si existe la asignatura en la lista del alumno y devolvemos su estado
+        for (Asignatura asignatura: asignaturas) {
+            Materia materia = asignatura.getMateria();
+            if ((materia.getMateriaId() == (idAsignatura))){
+                return asignatura.getEstado();
+            }
+        }
+
+        // Excepción asignatura inexistente
+        throw new AsignaturaInexistenteException("No se encontró la asignatura.");
+        }
 
     private void chequearCorrelatividad(Materia correlativa) throws CorrelatividadException {
         for (Asignatura a:

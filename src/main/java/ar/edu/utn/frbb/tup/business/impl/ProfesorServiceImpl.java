@@ -29,8 +29,6 @@ public class ProfesorServiceImpl implements ProfesorService {
     public ProfesorServiceImpl(ProfesorDao profesorDao) {
         this.profesorDao = profesorDao;
     }
-    public void MateriaServiceImpl(ProfesorDao profesorDao) {
-    }
 
     // ------------------------------------------------------------------------
 
@@ -115,7 +113,7 @@ public class ProfesorServiceImpl implements ProfesorService {
         // Buscar al profesor por el ID
         Profesor profesor = profesorDao.findProfesor(id);
 
-        // Obtener la lista de IDs de materias dictadas por el profesor
+        // Obtener la lista de ID de materias dictadas por el profesor
         List<Integer> materiasDictadasIDs = profesor.obtenerListaMateriasDictadas();
 
         // Crear una lista para almacenar las materias

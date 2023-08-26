@@ -1,28 +1,26 @@
 package ar.edu.utn.frbb.tup.persistence.impl;
 
-import ar.edu.utn.frbb.tup.business.exceptions.IdInvalidoException;
-import ar.edu.utn.frbb.tup.business.exceptions.NumeroInvalidoException;
 import ar.edu.utn.frbb.tup.model.Materia;
 import ar.edu.utn.frbb.tup.model.Profesor;
 import ar.edu.utn.frbb.tup.persistence.MateriaDao;
 import ar.edu.utn.frbb.tup.persistence.exception.MateriaNotFoundException;
-import ar.edu.utn.frbb.tup.persistence.exception.ProfesorNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 @Service
 public class MateriaDaoMemoryImpl implements MateriaDao {
 
-    // Atributos -------------------------------------------------------
+    // Atributos --------------------------------------------------------
 
     private static int contadorId = 1;
 
-    private static final Map<Integer, Materia> repositorioMateria = new HashMap<>();
+    static Map<Integer, Materia> repositorioMateria = new HashMap<>();
 
-    // ----------------------------------------------------------------
+    // ------------------------------------------------------------------
 
     // Métodos para operaciones CRUD de Materias ------------------------
 
@@ -65,6 +63,15 @@ public class MateriaDaoMemoryImpl implements MateriaDao {
 
     @Override
     public void agregarCorrelatividad(int idMateria, int idCorrelatividad) {
+    }
+
+    // ----------------------------------------------------------------
+
+    // Método auxiliar para obtener todas las materias  ---------------
+
+    @Override
+    public List<Materia> obtenerTodasLasMaterias() {
+        return new ArrayList<>(repositorioMateria.values());
     }
 
     // ----------------------------------------------------------------

@@ -4,24 +4,25 @@ import ar.edu.utn.frbb.tup.business.AlumnoService;
 import ar.edu.utn.frbb.tup.business.AsignaturaService;
 import ar.edu.utn.frbb.tup.business.exceptions.*;
 import ar.edu.utn.frbb.tup.model.Alumno;
-import ar.edu.utn.frbb.tup.model.Profesor;
+import ar.edu.utn.frbb.tup.model.EstadoAsignatura;
+import ar.edu.utn.frbb.tup.model.Materia;
 import ar.edu.utn.frbb.tup.model.dto.AlumnoDto;
 import ar.edu.utn.frbb.tup.model.dto.ProfesorDto;
+import ar.edu.utn.frbb.tup.model.exception.AsignaturaInexistenteException;
 import ar.edu.utn.frbb.tup.model.exception.CorrelatividadesNoAprobadasException;
 import ar.edu.utn.frbb.tup.model.exception.EstadoIncorrectoException;
 import ar.edu.utn.frbb.tup.persistence.AlumnoDao;
 import ar.edu.utn.frbb.tup.persistence.exception.AlumnoNotFoundException;
-import ar.edu.utn.frbb.tup.persistence.exception.ProfesorNotFoundException;
 import ar.edu.utn.frbb.tup.persistence.impl.AlumnoDaoMemoryImpl;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Random;
 
 @Component
 public class AlumnoServiceImpl implements AlumnoService {
 
     private static final AlumnoDao alumnoDao = new AlumnoDaoMemoryImpl();
-    private static final AsignaturaService asignaturaService = new AsignaturaServiceImpl();
 
     /*
     @Override
@@ -51,7 +52,22 @@ public class AlumnoServiceImpl implements AlumnoService {
     }
 
     @Override
-    public Alumno crearAlumno(AlumnoDto alumno) {
+    public EstadoAsignatura buscarEstadoAsignatura(String idAlumno, String idAsignatura)
+            throws AlumnoNotFoundException, AsignaturaInexistenteException {
+
+        // Nos fijamos que exista el alumno
+        buscarAlumno(idAlumno);
+
+        // Validamos los IDS
+        long alumnoID = validarId(idAlumno);
+        long asignaturaID = validarId(idAsignatura);
+
+        // Retornamos el estado de la asignatura (si existe)
+        return alumnoDao.getEstadoAsignaturaPorId(alumnoID, asignaturaID);
+    }
+
+    @Override
+    public Alumno crearAlumno(AlumnoDto alumno, List<Materia> materiasExistentes) {
         // Validamos que los datos sean correctos
         validarNombreOApellido(alumno.getNombre(), "nombre", "validarNulo");
         validarNombreOApellido(alumno.getApellido(), "apellido", "validarNulo");
@@ -63,7 +79,7 @@ public class AlumnoServiceImpl implements AlumnoService {
         a.setApellido(alumno.getApellido());
         a.setDni(alumno.getDni());
 
-        alumnoDao.saveAlumno(a);
+        alumnoDao.saveAlumno(a, materiasExistentes);
         return a;
     }
 
@@ -72,7 +88,9 @@ public class AlumnoServiceImpl implements AlumnoService {
         // Verificar que el ID sea válido
         long id = validarId(idString);
 
-        // Buscar al profesor por el ID
+        // Buscar al alumno por el ID
+
+        System.out.println("hola");
 
         return alumnoDao.findAlumno(id);
     }

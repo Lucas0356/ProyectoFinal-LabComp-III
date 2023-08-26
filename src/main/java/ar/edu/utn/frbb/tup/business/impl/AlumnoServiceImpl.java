@@ -5,7 +5,6 @@ import ar.edu.utn.frbb.tup.business.exceptions.*;
 import ar.edu.utn.frbb.tup.model.Alumno;
 import ar.edu.utn.frbb.tup.model.EstadoAsignatura;
 import ar.edu.utn.frbb.tup.model.Materia;
-import ar.edu.utn.frbb.tup.model.Profesor;
 import ar.edu.utn.frbb.tup.model.dto.AlumnoDto;
 import ar.edu.utn.frbb.tup.model.exception.AsignaturaInexistenteException;
 import ar.edu.utn.frbb.tup.model.exception.CorrelatividadesNoAprobadasException;
@@ -50,18 +49,18 @@ public class AlumnoServiceImpl implements AlumnoService {
     }
 
     @Override
-    public EstadoAsignatura buscarEstadoAsignatura(String idAlumno, String idAsignatura)
+    public EstadoAsignatura buscarEstadoAsignatura(long idAlumno, long idAsignatura)
             throws AlumnoNotFoundException, AsignaturaInexistenteException {
 
         // Nos fijamos que exista el alumno
         buscarAlumno(idAlumno);
 
         // Validamos los IDS
-        long alumnoID = validarId(idAlumno);
-        long asignaturaID = validarId(idAsignatura);
+        validarId(idAlumno);
+        validarId(idAsignatura);
 
         // Retornamos el estado de la asignatura (si existe)
-        return alumnoDao.getEstadoAsignaturaPorId(alumnoID, asignaturaID);
+        return alumnoDao.getEstadoAsignaturaPorId(idAlumno, idAsignatura);
     }
 
     @Override
@@ -87,21 +86,19 @@ public class AlumnoServiceImpl implements AlumnoService {
     }
 
     @Override
-    public Alumno buscarAlumno(String idString) throws AlumnoNotFoundException {
-        // Verificar que el ID sea válido
-        long id = validarId(idString);
+    public Alumno buscarAlumno(long idAlumno) throws AlumnoNotFoundException {
 
-        // Buscar al alumno por el ID
+        // Verificamos que el ID proporcionado sea válido
+        validarId(idAlumno);
 
-        System.out.println("hola");
-
-        return alumnoDao.findAlumno(id);
+        // Buscamos y retornamos al alumno por su ID
+        return alumnoDao.findAlumno(idAlumno);
     }
 
 
 
     @Override
-    public Alumno modificarAlumno(Long idAlumno, AlumnoDto alumnoModificado) throws AlumnoNotFoundException {
+    public Alumno modificarAlumno(long idAlumno, AlumnoDto alumnoModificado) throws AlumnoNotFoundException {
 
         // Si los datos no son vacíos, verificamos que sean válidos.
         if (!alumnoModificado.getNombre().isEmpty()) {
@@ -118,8 +115,14 @@ public class AlumnoServiceImpl implements AlumnoService {
     }
 
     @Override
-    public String borrarAlumno(String id) {
-        return null;
+    public String borrarAlumno(long idAlumno) throws AlumnoNotFoundException {
+        // Obtenemos al alumno por el ID
+        Alumno alumno = buscarAlumno(idAlumno);
+
+        // Borramos al alumno
+        alumnoDao.deleteAlumno(idAlumno);
+
+        return "El alumno con el id " + idAlumno + " ha sido eliminado correctamente.";
     }
 
     @Override
@@ -151,46 +154,32 @@ public class AlumnoServiceImpl implements AlumnoService {
         }
     }
 
-    private long validarDNI(Long dni) throws DniInvalidoException, NumeroInvalidoException {
+    private long validarDNI(long dni) throws DniInvalidoException, NumeroInvalidoException {
 
-        try {
-            String dniString = String.valueOf(dni);
+        // Convertimos el DNI en un string para hacer un .length()
+        String dniString = String.valueOf(dni);
 
-            // Verificar que el DNI tenga exactamente 8 dígitos
-            if (dniString.length() != 8) {
-                throw new DniInvalidoException("El DNI debe contener exactamente 8 dígitos.");
-            }
-
-            // Verificar que el DNI sea un número válido (mayor que 0)
-            if (dni <= 0) {
-                throw new DniInvalidoException("El DNI no es válido, debe ser un número mayor a 0.");
-            }
-
-            return dni;
-        } catch (NumberFormatException e) {
-            throw new NumeroInvalidoException("El DNI no es válido.");
+        // Verificamos que el DNI tenga exactamente 8 dígitos
+        if (dniString.length() != 8) {
+            throw new DniInvalidoException("El DNI debe contener exactamente 8 dígitos.");
         }
+
+        // Verificamos que el DNI sea un número válido (mayor que 0)
+        if (dni <= 0) {
+            throw new DniInvalidoException("El DNI no es válido, debe ser un número mayor a 0.");
+        }
+
+        return dni;
     }
 
 
-    private long validarId(String idString) throws IdInvalidoException, NumeroInvalidoException {
-        long idLong;
+    private long validarId(long id) throws IdInvalidoException, NumeroInvalidoException {
 
-        // Verificar que el ID no esté vacío
-        if (idString == null || idString.trim().isEmpty()) {
-            throw new IdInvalidoException("El ID no puede estar vacío.");
+        if (id <= 0) {
+            throw new IdInvalidoException("El ID no es válido, debe ser un número mayor a 0.");
         }
 
-        try {
-            idLong = Long.parseLong(idString); // Intentar convertir la cadena en un número long
-            if (idLong <= 0) {
-                throw new IdInvalidoException("El ID no es válido, debe ser un número mayor a 0.");
-            }
-        } catch (NumberFormatException e) {
-            throw new NumeroInvalidoException("El ID no es válido, debe ser un número entero.");
-        }
-
-        return idLong;
+        return id;
     }
 
     // ------------------------------------------------------------------------

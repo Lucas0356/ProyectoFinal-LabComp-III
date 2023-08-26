@@ -58,15 +58,15 @@ public class AlumnoDaoMemoryImpl implements AlumnoDao {
     @Override
     public Alumno updateAlumno(long idAlumno, AlumnoDto alumnoModificado) throws AlumnoNotFoundException {
 
-        // Verificamos si el profesor existe en el repositorio
+        // Verificamos si el alumno existe en el repositorio
         if (!repositorioAlumnos.containsKey(idAlumno)) {
             throw new AlumnoNotFoundException("No se encontró ningún alumno con el id " + idAlumno);
         }
 
-        // Obtenemos el profesor ya existente
+        // Obtenemos el alumno ya existente
         Alumno alumno = repositorioAlumnos.get(idAlumno);
 
-        // Obtenemos los nuevos valores de nombre, apellido y título del alumno
+        // Obtenemos los nuevos valores de nombre, apellido y dni del alumno
         String nuevoNombre = alumnoModificado.getNombre();
         String nuevoApellido = alumnoModificado.getApellido();
         long nuevoDni = alumnoModificado.getDni();
@@ -89,6 +89,9 @@ public class AlumnoDaoMemoryImpl implements AlumnoDao {
 
     @Override
     public void deleteAlumno(long idAlumno) {
+
+        // Borramos al alumno por su key (id)
+        repositorioAlumnos.remove(idAlumno);
 
     }
 

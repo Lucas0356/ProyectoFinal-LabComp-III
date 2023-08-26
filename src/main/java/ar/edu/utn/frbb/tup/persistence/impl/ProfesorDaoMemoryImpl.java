@@ -71,6 +71,7 @@ public class ProfesorDaoMemoryImpl implements ProfesorDao {
 
     @Override
     public void deleteProfesor(long id) throws ProfesorNotFoundException {
+
         // Verificamos si el profesor existe en el repositorio
         if (!repositorioProfesores.containsKey(id)) {
             throw new ProfesorNotFoundException("No se encontró ningún profesor con el id " + id);

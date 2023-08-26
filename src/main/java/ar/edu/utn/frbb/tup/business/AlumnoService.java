@@ -17,11 +17,11 @@ public interface AlumnoService {
 
     Alumno crearAlumno(AlumnoDto alumno, List<Materia> materiasExistentes);
 
-    Alumno modificarAlumno(Long idAlumno, AlumnoDto alumno) throws AlumnoNotFoundException;
+    Alumno modificarAlumno(long idAlumno, AlumnoDto alumno) throws AlumnoNotFoundException;
 
-    Alumno buscarAlumno(String id) throws AlumnoNotFoundException;
+    Alumno buscarAlumno(long id) throws AlumnoNotFoundException;
 
-    String borrarAlumno(String id);
+    String borrarAlumno(long id) throws AlumnoNotFoundException;
 
     // ------------------------------------------------------------------------
 
@@ -38,7 +38,7 @@ public interface AlumnoService {
 
     // Otros métodos con relación a asignatura --------------------------------
 
-    EstadoAsignatura buscarEstadoAsignatura(String idAlumno, String idAsignatura)
+    EstadoAsignatura buscarEstadoAsignatura(long idAlumno, long idAsignatura)
             throws AlumnoNotFoundException, AsignaturaInexistenteException;
 
     void actualizarAsignaturasAlumnos(Materia materia);

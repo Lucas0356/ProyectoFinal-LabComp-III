@@ -4,6 +4,7 @@ import ar.edu.utn.frbb.tup.model.Alumno;
 import ar.edu.utn.frbb.tup.model.EstadoAsignatura;
 import ar.edu.utn.frbb.tup.model.Materia;
 import ar.edu.utn.frbb.tup.model.dto.AlumnoDto;
+import ar.edu.utn.frbb.tup.model.dto.AsignaturaDto;
 import ar.edu.utn.frbb.tup.model.exception.AsignaturaInexistenteException;
 import ar.edu.utn.frbb.tup.model.exception.CorrelatividadesNoAprobadasException;
 import ar.edu.utn.frbb.tup.model.exception.EstadoIncorrectoException;
@@ -27,8 +28,8 @@ public interface AlumnoService {
 
     // Aprobar, cursar, perder regularidad asignatura -------------------------
 
-    void aprobarAsignatura(int materiaId, int nota, long dni) throws EstadoIncorrectoException,
-            CorrelatividadesNoAprobadasException;
+    void aprobarAsignatura(long idAsignatura, int nota, long idAlumno)
+            throws EstadoIncorrectoException, CorrelatividadesNoAprobadasException;
 
     void cursarAsignatura(long idAlumno, long idAsignatura);
 
@@ -42,6 +43,9 @@ public interface AlumnoService {
             throws AlumnoNotFoundException, AsignaturaInexistenteException;
 
     void actualizarAsignaturasAlumnos(Materia materia);
+
+    void modificarAsignatura(long idAlumno, long idAsignatura, AsignaturaDto asignaturaDto)
+            throws AsignaturaInexistenteException, AlumnoNotFoundException, EstadoIncorrectoException, CorrelatividadesNoAprobadasException;
 
     // ------------------------------------------------------------------------
 

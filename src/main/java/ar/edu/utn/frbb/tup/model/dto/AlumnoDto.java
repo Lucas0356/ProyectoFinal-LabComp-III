@@ -4,10 +4,10 @@ public class AlumnoDto {
 
     // Atributos --------------------------------------------------------------
 
-    long id;
-    String nombre;
-    String apellido;
-    long dni;
+    private long id;
+    private String nombre;
+    private String apellido;
+    private long dni;
 
     // ------------------------------------------------------------------------
 

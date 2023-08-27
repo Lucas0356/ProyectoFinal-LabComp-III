@@ -4,10 +4,10 @@ public class ProfesorDto {
 
     // Atributos --------------------------------------------------------------
 
-    long id;
-    String nombre;
-    String apellido;
-    String titulo;
+    private long id;
+    private String nombre;
+    private String apellido;
+    private String titulo;
 
     // ------------------------------------------------------------------------
 

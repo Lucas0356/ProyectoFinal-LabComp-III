@@ -6,6 +6,7 @@ import ar.edu.utn.frbb.tup.model.Alumno;
 import ar.edu.utn.frbb.tup.model.EstadoAsignatura;
 import ar.edu.utn.frbb.tup.model.Materia;
 import ar.edu.utn.frbb.tup.model.dto.AlumnoDto;
+import ar.edu.utn.frbb.tup.model.dto.AsignaturaDto;
 import ar.edu.utn.frbb.tup.model.exception.AsignaturaInexistenteException;
 import ar.edu.utn.frbb.tup.model.exception.CorrelatividadesNoAprobadasException;
 import ar.edu.utn.frbb.tup.model.exception.EstadoIncorrectoException;
@@ -103,7 +104,7 @@ public class AlumnoServiceImpl implements AlumnoService {
     // Aprobar, cursar, perder regularidad asignatura -------------------------
 
     @Override
-    public void aprobarAsignatura(int materiaId, int nota, long dni)
+    public void aprobarAsignatura(long idAsignatura, int nota, long idAlumno)
             throws EstadoIncorrectoException, CorrelatividadesNoAprobadasException {
     }
 
@@ -138,6 +139,31 @@ public class AlumnoServiceImpl implements AlumnoService {
     @Override
     public void actualizarAsignaturasAlumnos(Materia materia) {
         alumnoDao.actualizarAsignaturasAlumnos(materia);
+    }
+
+    @Override
+    public void modificarAsignatura(long idAlumno, long idAsignatura, AsignaturaDto asignaturaDto)
+            throws AsignaturaInexistenteException, AlumnoNotFoundException, EstadoIncorrectoException,
+            CorrelatividadesNoAprobadasException {
+
+        // Buscamos el estado de la asignatura actual
+        EstadoAsignatura estadoAsignaturaActual = buscarEstadoAsignatura(idAlumno, idAsignatura);
+
+        // Guardamos el estado a aplicar en la asignatura
+        EstadoAsignatura estadoAAsignar = asignaturaDto.getEstadoAsignatura();
+
+
+        switch (estadoAAsignar){
+            case NO_CURSADA:
+                perderRegularidadAsignatura(idAlumno, idAsignatura);
+                break;
+            case CURSADA:
+                cursarAsignatura(idAlumno, idAsignatura);
+                break;
+            case APROBADA:
+                aprobarAsignatura(idAsignatura, asignaturaDto.getNota() ,idAlumno);
+                break;
+        }
     }
 
     // ------------------------------------------------------------------------

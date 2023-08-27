@@ -13,19 +13,19 @@ import java.util.List;
 
 public interface AlumnoService {
 
-    // Crear, modificar, eliminar y buscar alumno ------------------------------
+    // Métodos para operaciones CRUD de Alumno --------------------------------
 
     Alumno crearAlumno(AlumnoDto alumno, List<Materia> materiasExistentes);
 
-    Alumno modificarAlumno(long idAlumno, AlumnoDto alumno) throws AlumnoNotFoundException;
-
     Alumno buscarAlumno(long id) throws AlumnoNotFoundException;
+
+    Alumno modificarAlumno(long idAlumno, AlumnoDto alumno) throws AlumnoNotFoundException;
 
     String borrarAlumno(long id) throws AlumnoNotFoundException;
 
     // ------------------------------------------------------------------------
 
-    // aprobar, cursar, perder regularidad asignatura -------------------------
+    // Aprobar, cursar, perder regularidad asignatura -------------------------
 
     void aprobarAsignatura(int materiaId, int nota, long dni) throws EstadoIncorrectoException,
             CorrelatividadesNoAprobadasException;
@@ -36,7 +36,7 @@ public interface AlumnoService {
 
     // ------------------------------------------------------------------------
 
-    // Otros métodos con relación a asignatura --------------------------------
+    // Otros métodos relacionados con asignatura ------------------------------
 
     EstadoAsignatura buscarEstadoAsignatura(long idAlumno, long idAsignatura)
             throws AlumnoNotFoundException, AsignaturaInexistenteException;

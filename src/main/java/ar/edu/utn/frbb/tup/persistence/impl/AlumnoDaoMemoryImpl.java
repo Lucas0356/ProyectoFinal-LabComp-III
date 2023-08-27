@@ -47,6 +47,7 @@ public class AlumnoDaoMemoryImpl implements AlumnoDao {
 
     @Override
     public Alumno findAlumno(long idAlumno) throws AlumnoNotFoundException {
+
         // Verificamos si el alumno existe en el repositorio
         if (!repositorioAlumnos.containsKey(idAlumno)) {
             throw new AlumnoNotFoundException("No se encontró un alumno con el id " + idAlumno);

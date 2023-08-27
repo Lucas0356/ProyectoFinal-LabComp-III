@@ -18,11 +18,16 @@ import java.util.List;
 
 @Service
 public class ProfesorServiceImpl implements ProfesorService {
+
+    // Dependencias -----------------------------------------------------------
+
     @Autowired
     private ProfesorDao profesorDao;
 
     @Autowired
     private MateriaDao materiaDao;
+
+    // ------------------------------------------------------------------------
 
     // Constructor ------------------------------------------------------------
 
@@ -35,91 +40,100 @@ public class ProfesorServiceImpl implements ProfesorService {
     // Métodos para operaciones CRUD de Profesor ------------------------------
 
     @Override
-    public Profesor crearProfesor(ProfesorDto profesor) {
-        // Validamos que los datos sean correctos
-        validarNombreOApellido(profesor.getNombre(), "nombre", "validarNulo");
-        validarNombreOApellido(profesor.getApellido(), "apellido", "validarNulo");
-        validarTitulo(profesor.getTitulo());
+    public Profesor crearProfesor(ProfesorDto profesorDto) {
 
-        Profesor p = new Profesor();
+        // Verificamos que los datos sean válidos
+        validarNombreOApellido(profesorDto.getNombre(), "nombre");
+        validarNombreOApellido(profesorDto.getApellido(), "apellido");
+        validarTitulo(profesorDto.getTitulo());
 
-        p.setNombre(profesor.getNombre().trim());
-        p.setApellido(profesor.getApellido().trim());
-        p.setTitulo(profesor.getTitulo().trim());
-        profesorDao.saveProfesor(p);
+        // Creamos al profesor
+        Profesor profesor = new Profesor();
 
-        return p;
-    }
+        // Asignamos los atributos al profesor
+        profesor.setNombre(profesorDto.getNombre());
+        profesor.setApellido(profesorDto.getApellido());
+        profesor.setTitulo(profesorDto.getTitulo());
 
-    @Override
-    public Profesor buscarProfesor(String idString) throws ProfesorNotFoundException {
-        // Verificar que el ID sea válido
-        long id = validarId(idString);
-
-        // Buscar al profesor por el ID
-        Profesor profesor = profesorDao.findProfesor(id);
-
-        // Si no encuentra al profesor con el ID:
-        if (profesor == null) {
-            throw new ProfesorNotFoundException("No se encontró ningún profesor con el ID proporcionado.");
-        }
+        // Guardamos al nuevo profesor
+        profesorDao.saveProfesor(profesor);
 
         return profesor;
     }
 
     @Override
-    public Profesor modificarProfesor(String idString, ProfesorDto nuevoProfesor)
-            throws ProfesorNotFoundException {
-        Profesor p = new Profesor(nuevoProfesor.getNombre(), nuevoProfesor.getApellido(),
-                nuevoProfesor.getTitulo());
+    public Profesor buscarProfesor(long idProfesor) throws ProfesorNotFoundException {
 
-        // Validamos que los datos sean válidos (no nulos porque esos no se modifican)
-        validarNombreOApellido(p.getNombre(), "nombre", "noValidarNulo");
-        validarNombreOApellido(p.getApellido(), "apellido", "noValidarNulo");
+        // Verificamos que el ID proporcionado sea válido
+        validarId(idProfesor);
 
-        // Verificar que el ID sea válido
-        long id = validarId(idString);
-
-        return(profesorDao.updateProfesor(id, p));
+        // Buscamos y retornamos al profesor por su ID
+        return profesorDao.findProfesor(idProfesor);
     }
 
     @Override
-    public String borrarProfesor(String idString) throws ProfesorNotFoundException, MateriaNotFoundException {
-        // Verificar que el ID sea válido
-        long id = validarId(idString);
+    public Profesor modificarProfesor(long idProfesor, ProfesorDto profesorModificado)
+            throws ProfesorNotFoundException {
 
-        // Obtener al profesor por el ID
-        Profesor profesor = profesorDao.findProfesor(id);
+        // Si los datos no son nulos ni vacíos, verificamos que sean válidos
+        if (profesorModificado.getNombre() != null && !profesorModificado.getNombre().isEmpty()) {
+            validarNombreOApellido(profesorModificado.getNombre(), "nombre");
+        }
+        if (profesorModificado.getApellido() != null && !profesorModificado.getApellido().isEmpty()) {
+            validarNombreOApellido(profesorModificado.getApellido(), "apellido");
+        }
+        if (profesorModificado.getTitulo() != null && !profesorModificado.getTitulo().isEmpty()) {
+            validarTitulo(profesorModificado.getTitulo());
+        }
 
-        // Obtener la lista de IDs de las materias dictadas por el profesor
+        // Nos conectamos con la otra capa para modificar al profesor y retornamos la modificación
+        return(profesorDao.updateProfesor(idProfesor, profesorModificado));
+    }
+
+    @Override
+    public String borrarProfesor(long idProfesor) throws ProfesorNotFoundException, MateriaNotFoundException {
+
+        // Verificamos que el ID sea válido
+        validarId(idProfesor);
+
+        // Buscamos al profesor por el ID
+        Profesor profesor = profesorDao.findProfesor(idProfesor);
+
+        // Guardamos la lista de IDs de las materias dictadas por el profesor
         List<Integer> materiasDictadasIDs = profesor.obtenerListaMateriasDictadas();
 
-        // Eliminar cada materia dictada por el profesor
+        // Eliminamos cada materia dictada por el profesor
         for (int materiaID : materiasDictadasIDs) {
             materiaDao.deleteMateria(materiaID);
         }
 
         // Borramos al profesor
-        profesorDao.deleteProfesor(id);
+        profesorDao.deleteProfesor(idProfesor);
 
-        return "El profesor con el id " + id + " ha sido eliminado correctamente, junto con sus materias dictadas.";
+        return "El profesor con el id " + idProfesor + " ha sido eliminado correctamente," +
+                " junto con sus materias dictadas.";
     }
 
+    // ------------------------------------------------------------------------
+
+    // Métodos relacionados con las materias dictadas -------------------------
+
     @Override
-    public List<Materia> obtenerMateriasDictadasProfesor(String idString) throws ProfesorNotFoundException{
-        // Verificar que el ID sea válido
-        long id = validarId(idString);
+    public List<Materia> obtenerMateriasDictadasProfesor(long idProfesor) throws ProfesorNotFoundException{
 
-        // Buscar al profesor por el ID
-        Profesor profesor = profesorDao.findProfesor(id);
+        // Verificamos que el ID proporcionado sea válido
+        validarId(idProfesor);
 
-        // Obtener la lista de ID de materias dictadas por el profesor
+        // Buscamos al profesor por el ID
+        Profesor profesor = profesorDao.findProfesor(idProfesor);
+
+        // Guardamos una lista con los ID de todas las materias dictadas por el profesor
         List<Integer> materiasDictadasIDs = profesor.obtenerListaMateriasDictadas();
 
-        // Crear una lista para almacenar las materias
+        // Creamos una lista para almacenar las materias
         List<Materia> materiasDictadas = new ArrayList<>();
 
-        // Buscar cada materia por su ID y agregarla a la lista
+        // Buscamos cada materia por su ID y la agregamos a la lista
         for (Integer idMateria : materiasDictadasIDs) {
             try {
                 Materia materia = materiaDao.findMateria(idMateria);
@@ -130,7 +144,7 @@ public class ProfesorServiceImpl implements ProfesorService {
         }
 
         // Ordenar las materias alfabéticamente por su nombre
-        materiasDictadas.sort(new Comparator<Materia>() {
+        materiasDictadas.sort(new Comparator<>() {
             @Override
             public int compare(Materia materia1, Materia materia2) {
                 return materia1.getNombre().compareToIgnoreCase(materia2.getNombre());
@@ -144,16 +158,15 @@ public class ProfesorServiceImpl implements ProfesorService {
 
     // Métodos auxiliares para validar datos ----------------------------------
 
-    private void validarNombreOApellido(String texto, String tipo, String validarNulo) throws NombreInvalidoException,
+    private void validarNombreOApellido(String texto, String tipo) throws NombreInvalidoException,
             ApellidoInvalidoException {
-        if (validarNulo.equals("validarNulo")){
-            // Verificamos que el nombre/apellido no esté vacío
-            if (texto == null || texto.trim().isEmpty()) {
-                if (tipo.equals("nombre")) {
-                    throw new NombreInvalidoException("El nombre no puede estar vacío.");
-                } else{
-                    throw new ApellidoInvalidoException("El apellido no puede estar vacío.");
-                }
+
+        // Verificamos que el nombre/apellido no esté vacío
+        if (texto == null || texto.isEmpty()) {
+            if (tipo.equals("nombre")) {
+                throw new NombreInvalidoException("El nombre no puede estar vacío.");
+            } else {
+                throw new ApellidoInvalidoException("El apellido no puede estar vacío.");
             }
         }
 
@@ -168,30 +181,26 @@ public class ProfesorServiceImpl implements ProfesorService {
     }
 
     private void validarTitulo(String tituloProfesor) throws TituloInvalidoException {
-        // Verificar que el título del profesor no esté vacío
+
+        // Verificamos que el título del profesor no esté vacío
         if (tituloProfesor == null || tituloProfesor.trim().isEmpty()) {
             throw new TituloInvalidoException("El título del profesor no puede estar vacío.");
         }
+
+        // Verificamos que el título del profesor al menos tenga una letra
+        if (!tituloProfesor.matches(".*[a-zA-Z].*")) {
+            throw new TituloInvalidoException("El título del profersor debe contener al menos una letra.");
+        }
+
     }
 
-    private long validarId(String idString) throws IdInvalidoException, NumeroInvalidoException {
-        long idLong;
+    private void validarId(long id) throws IdInvalidoException {
 
-        // Verificar que el ID no esté vacío
-        if (idString == null || idString.trim().isEmpty()) {
-            throw new IdInvalidoException("El ID no puede estar vacío.");
+        // Verificamos que el id sea un número mayor a 0
+        if (id <= 0) {
+            throw new IdInvalidoException("El ID no es válido, debe ser un número mayor a 0.");
         }
 
-        try {
-            idLong = Long.parseLong(idString); // Intentar convertir la cadena en un número long
-            if (idLong <= 0) {
-                throw new IdInvalidoException("El ID no es válido, debe ser un número mayor a 0.");
-            }
-        } catch (NumberFormatException e) {
-            throw new NumeroInvalidoException("El ID no es válido, debe ser un número entero.");
-        }
-
-        return idLong;
     }
 
     // ------------------------------------------------------------------------

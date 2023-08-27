@@ -18,8 +18,8 @@ public class MateriaDto {
 
     // Getters y Setters ------------------------------------------------------
 
-    public String getProfesorId() {
-        return String.valueOf(profesorId);
+    public long getProfesorId() {
+        return profesorId;
     }
 
     public void setProfesorId(long profesorId) {

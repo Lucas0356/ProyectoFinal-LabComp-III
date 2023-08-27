@@ -25,20 +25,21 @@ public class ProfesorController {
         return profesorService.crearProfesor(profesorDto);
     }
 
-    @GetMapping("/{id}")
-    public Profesor buscarProfesor(@PathVariable String id) throws ProfesorNotFoundException {
-        return profesorService.buscarProfesor(id);
+    @GetMapping("/{idProfesor}")
+    public Profesor buscarProfesor(@PathVariable long idProfesor) throws ProfesorNotFoundException {
+        return profesorService.buscarProfesor(idProfesor);
     }
 
-    @PutMapping("/{id}")
-    public Profesor modificarProfesor(@PathVariable String id, @RequestBody ProfesorDto profesorDto)
+    @PutMapping("/{idProfesor}")
+    public Profesor modificarProfesor(@PathVariable long idProfesor, @RequestBody ProfesorDto profesorDto)
             throws ProfesorNotFoundException {
-        return profesorService.modificarProfesor(id, profesorDto);
+        return profesorService.modificarProfesor(idProfesor, profesorDto);
     }
 
-    @DeleteMapping("/{id}")
-    public String borrarProfesor(@PathVariable String id) throws ProfesorNotFoundException, MateriaNotFoundException {
-        return profesorService.borrarProfesor(id);
+    @DeleteMapping("/{idProfesor}")
+    public String borrarProfesor(@PathVariable long idProfesor)
+            throws ProfesorNotFoundException, MateriaNotFoundException {
+        return profesorService.borrarProfesor(idProfesor);
     }
 
     // ----------------------------------------------------------------
@@ -46,8 +47,9 @@ public class ProfesorController {
     // Métodos varios -------------------------------------------------
 
     @GetMapping("/{id}/materias")
-    public List<Materia> obtenerMateriasDictadasProfesor(@PathVariable String id) throws ProfesorNotFoundException{
-        return profesorService.obtenerMateriasDictadasProfesor(id);
+    public List<Materia> obtenerMateriasDictadasProfesor(@PathVariable long idProfesor)
+            throws ProfesorNotFoundException{
+        return profesorService.obtenerMateriasDictadasProfesor(idProfesor);
     }
 
     // ----------------------------------------------------------------

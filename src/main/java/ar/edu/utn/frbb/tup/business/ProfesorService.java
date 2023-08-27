@@ -14,13 +14,17 @@ public interface ProfesorService{
 
     Profesor crearProfesor(ProfesorDto profesor);
 
-    Profesor buscarProfesor(String id) throws ProfesorNotFoundException;
+    Profesor buscarProfesor(long id) throws ProfesorNotFoundException;
 
-    Profesor modificarProfesor(String id, ProfesorDto profesor) throws ProfesorNotFoundException;
+    Profesor modificarProfesor(long id, ProfesorDto profesor) throws ProfesorNotFoundException;
 
-    String borrarProfesor(String id) throws ProfesorNotFoundException, MateriaNotFoundException;
+    String borrarProfesor(long id) throws ProfesorNotFoundException, MateriaNotFoundException;
 
-    List<Materia> obtenerMateriasDictadasProfesor(String id) throws ProfesorNotFoundException;
+    // ------------------------------------------------------------------------
+
+    // Métodos relacionados con las materias dictadas -------------------------
+
+    List<Materia> obtenerMateriasDictadasProfesor(long id) throws ProfesorNotFoundException;
 
     // ------------------------------------------------------------------------
 

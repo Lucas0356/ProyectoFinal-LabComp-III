@@ -32,4 +32,6 @@ public class MateriaController {
         return materiaService.buscarMateria(idMateria);
     }
 
+    // -------------------------------------------------------------------------
+
 }

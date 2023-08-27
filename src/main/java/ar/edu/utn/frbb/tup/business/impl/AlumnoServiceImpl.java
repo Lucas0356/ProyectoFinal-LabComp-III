@@ -71,11 +71,11 @@ public class AlumnoServiceImpl implements AlumnoService {
     @Override
     public Alumno modificarAlumno(long idAlumno, AlumnoDto alumnoModificado) throws AlumnoNotFoundException {
 
-        // Si los datos no son vacíos, verificamos que sean válidos
-        if (!alumnoModificado.getNombre().isEmpty()) {
+        // Si los datos no son nulos ni vacíos, verificamos que sean válidos
+        if (alumnoModificado.getNombre() != null && !alumnoModificado.getNombre().isEmpty()) {
             validarNombreOApellido(alumnoModificado.getNombre(), "nombre");
         }
-        if (!alumnoModificado.getApellido().isEmpty()) {
+        if (alumnoModificado.getApellido() != null && !alumnoModificado.getApellido().isEmpty()) {
             validarNombreOApellido(alumnoModificado.getApellido(), "apellido");
         }
         if (alumnoModificado.getDni() != 0) {

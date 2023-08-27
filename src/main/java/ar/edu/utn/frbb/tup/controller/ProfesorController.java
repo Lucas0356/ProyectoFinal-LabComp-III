@@ -46,7 +46,7 @@ public class ProfesorController {
 
     // Métodos varios -------------------------------------------------
 
-    @GetMapping("/{id}/materias")
+    @GetMapping("/{idProfesor}/materias")
     public List<Materia> obtenerMateriasDictadasProfesor(@PathVariable long idProfesor)
             throws ProfesorNotFoundException{
         return profesorService.obtenerMateriasDictadasProfesor(idProfesor);

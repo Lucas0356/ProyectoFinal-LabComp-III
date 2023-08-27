@@ -80,12 +80,9 @@ public class Alumno {
 
     // Métodos relacionados con asignaturas -----------------------------------
 
-    public void agregarAsignatura(List<Asignatura> asignaturas) {
-        this.asignaturas = asignaturas;
-    }
-
     /*
-    public void aprobarAsignatura(Materia materia, int nota) throws EstadoIncorrectoException, CorrelatividadException, AsignaturaInexistenteException {
+    public void aprobarAsignatura(Materia materia, int nota)
+        throws EstadoIncorrectoException, CorrelatividadException, AsignaturaInexistenteException {
         Asignatura asignaturaAAprobar = getAsignaturaAAprobar(materia);
 
         for (Materia correlativa :
@@ -131,10 +128,6 @@ public class Alumno {
         }
 
         throw new AsignaturaInexistenteException("No se encontró la materia.");
-    }
-
-    public List<Asignatura> obtenerListaAsignaturas(){
-        return this.asignaturas;
     }
 
     public boolean puedeAprobar(Asignatura asignatura) {

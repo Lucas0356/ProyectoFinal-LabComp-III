@@ -28,7 +28,7 @@ public class MateriaController {
     }
 
     @GetMapping("/{idMateria}")
-    public Materia buscarMateria(@PathVariable String idMateria) throws MateriaNotFoundException {
+    public Materia buscarMateria(@PathVariable int idMateria) throws MateriaNotFoundException {
         return materiaService.buscarMateria(idMateria);
     }
 

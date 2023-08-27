@@ -49,9 +49,7 @@ public class AlumnoDaoMemoryImpl implements AlumnoDao {
     public Alumno findAlumno(long idAlumno) throws AlumnoNotFoundException {
 
         // Verificamos si el alumno existe en el repositorio
-        if (!repositorioAlumnos.containsKey(idAlumno)) {
-            throw new AlumnoNotFoundException("No se encontró un alumno con el id " + idAlumno);
-        }
+        verificarExistenciaAlumno(idAlumno);
 
         return repositorioAlumnos.get(idAlumno);
     }
@@ -60,9 +58,7 @@ public class AlumnoDaoMemoryImpl implements AlumnoDao {
     public Alumno updateAlumno(long idAlumno, AlumnoDto alumnoModificado) throws AlumnoNotFoundException {
 
         // Verificamos si el alumno existe en el repositorio
-        if (!repositorioAlumnos.containsKey(idAlumno)) {
-            throw new AlumnoNotFoundException("No se encontró ningún alumno con el id " + idAlumno);
-        }
+        verificarExistenciaAlumno(idAlumno);
 
         // Obtenemos el alumno ya existente
         Alumno alumno = repositorioAlumnos.get(idAlumno);
@@ -89,7 +85,10 @@ public class AlumnoDaoMemoryImpl implements AlumnoDao {
     }
 
     @Override
-    public void deleteAlumno(long idAlumno) {
+    public void deleteAlumno(long idAlumno) throws AlumnoNotFoundException {
+
+        // Verificamos si el alumno existe en el repositorio
+        verificarExistenciaAlumno(idAlumno);
 
         // Borramos al alumno por su key (id)
         repositorioAlumnos.remove(idAlumno);
@@ -135,6 +134,18 @@ public class AlumnoDaoMemoryImpl implements AlumnoDao {
 
             // Actualizamos el alumno en la base de datos
             repositorioAlumnos.put(alumno.getId(), alumno);
+        }
+    }
+
+    // ----------------------------------------------------------------
+
+    // Métodos auxiliares ---------------------------------------------
+
+    private void verificarExistenciaAlumno(long idAlumno) throws AlumnoNotFoundException {
+
+        // Verificamos si el alumno existe en el repositorio
+        if (!repositorioAlumnos.containsKey(idAlumno)) {
+            throw new AlumnoNotFoundException("No se encontró ningún alumno con el id " + idAlumno);
         }
     }
 

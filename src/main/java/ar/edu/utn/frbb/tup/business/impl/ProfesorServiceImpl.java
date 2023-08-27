@@ -47,7 +47,7 @@ public class ProfesorServiceImpl implements ProfesorService {
         validarNombreOApellido(profesorDto.getApellido(), "apellido");
         validarTitulo(profesorDto.getTitulo());
 
-        // Creamos al profesor
+        // Creamos al profesor vacío
         Profesor profesor = new Profesor();
 
         // Asignamos los atributos al profesor

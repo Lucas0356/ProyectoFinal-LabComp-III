@@ -5,16 +5,12 @@ import ar.edu.utn.frbb.tup.business.exceptions.*;
 import ar.edu.utn.frbb.tup.model.Alumno;
 import ar.edu.utn.frbb.tup.model.EstadoAsignatura;
 import ar.edu.utn.frbb.tup.model.Materia;
-import ar.edu.utn.frbb.tup.model.Profesor;
 import ar.edu.utn.frbb.tup.model.dto.AlumnoDto;
 import ar.edu.utn.frbb.tup.model.exception.AsignaturaInexistenteException;
 import ar.edu.utn.frbb.tup.model.exception.CorrelatividadesNoAprobadasException;
 import ar.edu.utn.frbb.tup.model.exception.EstadoIncorrectoException;
 import ar.edu.utn.frbb.tup.persistence.AlumnoDao;
-import ar.edu.utn.frbb.tup.persistence.MateriaDao;
-import ar.edu.utn.frbb.tup.persistence.ProfesorDao;
 import ar.edu.utn.frbb.tup.persistence.exception.AlumnoNotFoundException;
-import ar.edu.utn.frbb.tup.persistence.impl.AlumnoDaoMemoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -48,7 +44,7 @@ public class AlumnoServiceImpl implements AlumnoService {
         validarNombreOApellido(alumnoDto.getApellido(), "apellido");
         validarDNI(alumnoDto.getDni());
 
-        // Creamos al alumno
+        // Creamos al alumno vacío
         Alumno alumno = new Alumno();
 
         // Asignamos los atributos al alumno

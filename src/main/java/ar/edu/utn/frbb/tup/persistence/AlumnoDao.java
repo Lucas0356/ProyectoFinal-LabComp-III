@@ -19,7 +19,7 @@ public interface AlumnoDao {
 
     Alumno updateAlumno(long idAlumno, AlumnoDto alumnoModificado) throws AlumnoNotFoundException;
 
-    void deleteAlumno(long idAlumno);
+    void deleteAlumno(long idAlumno) throws AlumnoNotFoundException;
 
     // ----------------------------------------------------------------
 

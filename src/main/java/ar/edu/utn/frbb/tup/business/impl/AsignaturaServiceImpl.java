@@ -1,11 +1,10 @@
 package ar.edu.utn.frbb.tup.business.impl;
 
 import ar.edu.utn.frbb.tup.business.AsignaturaService;
-import ar.edu.utn.frbb.tup.business.exceptions.ApellidoInvalidoException;
-import ar.edu.utn.frbb.tup.business.exceptions.NombreInvalidoException;
 import ar.edu.utn.frbb.tup.model.Asignatura;
 
 public class AsignaturaServiceImpl implements AsignaturaService {
+
     @Override
     public Asignatura getAsignatura(int materiaId, long dni) {
         return null;

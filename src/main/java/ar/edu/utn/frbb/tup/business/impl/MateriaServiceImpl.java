@@ -6,6 +6,7 @@ import ar.edu.utn.frbb.tup.business.exceptions.*;
 import ar.edu.utn.frbb.tup.model.Materia;
 import ar.edu.utn.frbb.tup.model.Profesor;
 import ar.edu.utn.frbb.tup.model.dto.MateriaDto;
+import ar.edu.utn.frbb.tup.persistence.AlumnoDao;
 import ar.edu.utn.frbb.tup.persistence.MateriaDao;
 import ar.edu.utn.frbb.tup.persistence.exception.MateriaNotFoundException;
 import ar.edu.utn.frbb.tup.persistence.exception.ProfesorNotFoundException;
@@ -16,11 +17,16 @@ import java.util.List;
 
 @Service
 public class MateriaServiceImpl implements MateriaService {
+
+    // Dependencias -----------------------------------------------------------
+
     @Autowired
     private MateriaDao materiaDao;
 
     @Autowired
     private ProfesorService profesorService;
+
+    // ------------------------------------------------------------------------
 
     // Constructor ------------------------------------------------------------
 
@@ -33,26 +39,32 @@ public class MateriaServiceImpl implements MateriaService {
     // Métodos para operaciones CRUD de Materia -------------------------------
 
     @Override
-    public Materia crearMateria(MateriaDto materia) throws ProfesorNotFoundException {
-        // Validamos que los datos sean correctos
-        validarNombreMateria(materia.getNombre(), "validarNulo");
-        validarAnio(materia.getAnio());
-        validarCuatrimestre(materia.getCuatrimestre());
+    public Materia crearMateria(MateriaDto materiaDto) throws ProfesorNotFoundException {
 
-        Materia m = new Materia();
-        m.setNombre(materia.getNombre());
-        m.setAnio(materia.getAnio());
-        m.setCuatrimestre(materia.getCuatrimestre());
+        // Verificamos que los datos sean válidos
+        validarNombreMateria(materiaDto.getNombre());
+        validarAnio(materiaDto.getAnio());
+        validarCuatrimestre(materiaDto.getCuatrimestre());
+
+        // Creamos la materia vacía
+        Materia materia = new Materia();
+
+        // Asignamos los atributos a la materia
+        materia.setNombre(materiaDto.getNombre());
+        materia.setAnio(materiaDto.getAnio());
+        materia.setCuatrimestre(materiaDto.getCuatrimestre());
 
         // Buscamos al profesor por su ID para asignarlo a la materia
-        Profesor profesor = profesorService.buscarProfesor(materia.getProfesorId());
-        m.setProfesor(profesor);
+        Profesor profesor = profesorService.buscarProfesor(materiaDto.getProfesorId());
+        materia.setProfesor(profesor);
 
         // Asignamos las correlatividades a la materia
-        m.setCorrelatividades(materia.getCorrelatividades());
+        materia.setCorrelatividades(materiaDto.getCorrelatividades());
 
-        materiaDao.saveMateria(m);
-        return m;
+        // Guardamos la nueva materia
+        materiaDao.saveMateria(materia);
+
+        return materia;
     }
 
     // ------------------------------------------------------------------------
@@ -61,12 +73,17 @@ public class MateriaServiceImpl implements MateriaService {
 
     @Override
     public List<Materia> obtenerTodasLasMaterias() {
+
         return materiaDao.obtenerTodasLasMaterias();
     }
 
     @Override
-    public Materia buscarMateria(String idMateriaString) throws MateriaNotFoundException {
-        int idMateria = validarIdMateria(idMateriaString);
+    public Materia buscarMateria(int idMateria) throws MateriaNotFoundException {
+
+        // Verificamos que el ID proporcionado sea válido
+        validarIdMateria(idMateria);
+
+        // Buscamos y retornamos la materia por su ID
         return materiaDao.findMateria(idMateria);
     }
 
@@ -74,12 +91,11 @@ public class MateriaServiceImpl implements MateriaService {
 
     // Métodos auxiliares para validar datos ----------------------------------
 
-    private void validarNombreMateria(String nombreMateria, String validarNulo) throws NombreInvalidoException{
-        if (validarNulo.equals("validarNulo")){
-            // Verificamos que el nombre de la materia no esté vacío
-            if (nombreMateria == null || nombreMateria.trim().isEmpty()) {
-                throw new NombreInvalidoException("El nombre de la materia no puede estar vacío.");
-            }
+    private void validarNombreMateria(String nombreMateria) throws NombreInvalidoException{
+
+        // Verificamos que el nombre de la materia no esté vacío
+        if (nombreMateria == null || nombreMateria.trim().isEmpty()) {
+            throw new NombreInvalidoException("El nombre de la materia no puede estar vacío.");
         }
 
         // Verificamos que el nombre de la materia contenga solo letras y espacios
@@ -89,7 +105,8 @@ public class MateriaServiceImpl implements MateriaService {
         }
 
     private void validarAnio(int anio) throws AnioInvalidoException{
-        // Verificar que el año no sea menor que 0
+
+        // Verificamos que el año no sea menor que 0
         if (anio <= 0) {
             throw new AnioInvalidoException("El año no puede ser menor o igual que 0.");
         }
@@ -101,30 +118,19 @@ public class MateriaServiceImpl implements MateriaService {
     }
 
     private void validarCuatrimestre(int cuatrimestre) throws CuatrimestreInvalidoException {
-        // Verificar que el cuatrimestre sea un número válido (entre 1 y 2)
+
+        // Verificamos que el cuatrimestre sea un número válido (entre 1 y 2)
         if (cuatrimestre < 1 || cuatrimestre > 2) {
             throw new CuatrimestreInvalidoException("El cuatrimestre no es válido. Debe ser 1 o 2.");
         }
     }
 
-    private int validarIdMateria(String idMateriaString) throws IdInvalidoException, NumeroInvalidoException {
-        int idMateriaInt;
+    private void validarIdMateria(int idMateria) throws IdInvalidoException {
 
-        // Verificar que el ID no esté vacío
-        if (idMateriaString == null || idMateriaString.trim().isEmpty()) {
-            throw new IdInvalidoException("El id no puede estar vacío.");
+        // Verificamos que el id sea un número mayor a 0
+        if (idMateria <= 0) {
+            throw new IdInvalidoException("El ID no es válido, debe ser un número mayor a 0.");
         }
-
-        try {
-            idMateriaInt = Integer.parseInt(idMateriaString); // Intentar convertir la cadena en un número int
-            if (idMateriaInt <= 0) {
-                throw new IdInvalidoException("El id no es válido, debe ser un número mayor a 0.");
-            }
-        } catch (NumberFormatException e) {
-            throw new NumeroInvalidoException("El id no es válido, debe ser un número entero.");
-        }
-
-        return idMateriaInt;
     }
 
     // ------------------------------------------------------------------------

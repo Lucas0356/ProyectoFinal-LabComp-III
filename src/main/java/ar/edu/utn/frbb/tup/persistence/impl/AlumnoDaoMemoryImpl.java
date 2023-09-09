@@ -2,6 +2,7 @@ package ar.edu.utn.frbb.tup.persistence.impl;
 
 import ar.edu.utn.frbb.tup.model.*;
 import ar.edu.utn.frbb.tup.model.dto.AlumnoDto;
+import ar.edu.utn.frbb.tup.model.dto.AsignaturaDto;
 import ar.edu.utn.frbb.tup.model.exception.AsignaturaInexistenteException;
 import ar.edu.utn.frbb.tup.persistence.AlumnoDao;
 import ar.edu.utn.frbb.tup.persistence.exception.AlumnoNotFoundException;
@@ -100,9 +101,16 @@ public class AlumnoDaoMemoryImpl implements AlumnoDao {
     // Métodos para operaciones relacionadas con asignaturas ----------
 
     @Override
-    public void cursarAsignatura(long idAlumno, int idAsignatura) throws AlumnoNotFoundException {
+    public void cursarAsignatura(long idAlumno, long idAsignatura, AsignaturaDto asignaturaDto) throws AlumnoNotFoundException,
+            AsignaturaInexistenteException {
+        // Buscamos al alumno
         Alumno alumno = findAlumno(idAlumno);
 
+        // Buscamos la asignatura por su id
+        Asignatura asignaturaActual = getAsignaturaPorId(idAlumno, idAsignatura);
+
+        // Invocamos su método para actualizar la asignatura
+        alumno.cursarAsignatura(asignaturaActual);
     }
 
     @Override
@@ -122,6 +130,17 @@ public class AlumnoDaoMemoryImpl implements AlumnoDao {
 
         // Retornamos el estado de la asignatura (si existe)
         return alumno.getEstadoAsignaturaAlumno(idAsignatura);
+    }
+
+    @Override
+    public Asignatura getAsignaturaPorId(long idAlumno, long idAsignatura) throws AlumnoNotFoundException,
+            AsignaturaInexistenteException {
+
+        // Buscamos al alumno
+        Alumno alumno = findAlumno(idAlumno);
+
+        // Retornamos el estado de la asignatura (si existe)
+        return alumno.getAsignaturaAlumno(idAsignatura);
     }
 
     @Override

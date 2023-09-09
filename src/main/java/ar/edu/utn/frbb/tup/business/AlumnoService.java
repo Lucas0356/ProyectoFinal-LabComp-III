@@ -9,6 +9,7 @@ import ar.edu.utn.frbb.tup.model.exception.AsignaturaInexistenteException;
 import ar.edu.utn.frbb.tup.model.exception.CorrelatividadesNoAprobadasException;
 import ar.edu.utn.frbb.tup.model.exception.EstadoIncorrectoException;
 import ar.edu.utn.frbb.tup.persistence.exception.AlumnoNotFoundException;
+import ar.edu.utn.frbb.tup.persistence.exception.MateriaNotFoundException;
 
 import java.util.List;
 
@@ -29,9 +30,7 @@ public interface AlumnoService {
     // Aprobar, cursar, perder regularidad asignatura -------------------------
 
     void aprobarAsignatura(long idAsignatura, int nota, long idAlumno)
-            throws EstadoIncorrectoException, CorrelatividadesNoAprobadasException;
-
-    void cursarAsignatura(long idAlumno, long idAsignatura);
+            throws EstadoIncorrectoException, CorrelatividadesNoAprobadasException, AsignaturaInexistenteException, AlumnoNotFoundException, MateriaNotFoundException;
 
     void perderRegularidadAsignatura(long idAlumno, long idAsignatura) throws EstadoIncorrectoException;
 

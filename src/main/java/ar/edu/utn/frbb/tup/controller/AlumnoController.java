@@ -10,6 +10,7 @@ import ar.edu.utn.frbb.tup.model.dto.AsignaturaDto;
 import ar.edu.utn.frbb.tup.model.exception.AsignaturaInexistenteException;
 import ar.edu.utn.frbb.tup.model.exception.CorrelatividadesNoAprobadasException;
 import ar.edu.utn.frbb.tup.model.exception.EstadoIncorrectoException;
+import ar.edu.utn.frbb.tup.persistence.exception.NotaIncorrectaException;
 import ar.edu.utn.frbb.tup.persistence.exception.AlumnoNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -63,13 +64,14 @@ public class AlumnoController {
     }
 
     @PutMapping("/{idAlumno}/asignatura/{idAsignatura}")
-    public void ModificarEstadoAsignatura(
+    public String ModificarEstadoAsignatura(
             @PathVariable long idAlumno, @PathVariable long idAsignatura,
             @RequestBody AsignaturaDto asignaturaDto)
             throws AlumnoNotFoundException, AsignaturaInexistenteException, EstadoIncorrectoException,
-            CorrelatividadesNoAprobadasException {
+            CorrelatividadesNoAprobadasException, NotaIncorrectaException {
 
         alumnoService.modificarAsignatura(idAlumno, idAsignatura, asignaturaDto);
+        return ("La asignatura se ha modificado exitosamente");
     }
 
     // ----------------------------------------------------------------

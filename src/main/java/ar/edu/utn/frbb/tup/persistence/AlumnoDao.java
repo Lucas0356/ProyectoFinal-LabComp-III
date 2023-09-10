@@ -7,6 +7,8 @@ import ar.edu.utn.frbb.tup.model.Materia;
 import ar.edu.utn.frbb.tup.model.dto.AlumnoDto;
 import ar.edu.utn.frbb.tup.model.dto.AsignaturaDto;
 import ar.edu.utn.frbb.tup.model.exception.AsignaturaInexistenteException;
+import ar.edu.utn.frbb.tup.model.exception.CorrelatividadesNoAprobadasException;
+import ar.edu.utn.frbb.tup.persistence.exception.NotaIncorrectaException;
 import ar.edu.utn.frbb.tup.persistence.exception.AlumnoNotFoundException;
 
 import java.util.List;
@@ -30,9 +32,9 @@ public interface AlumnoDao {
     void cursarAsignatura(long idAlumno, long idAsignatura, AsignaturaDto nuevaAsignatura)
             throws AlumnoNotFoundException, AsignaturaInexistenteException;
 
-    void aprobarAsignatura(long idAlumno, int idAsignatura, int nota);
+    void aprobarAsignatura(long idAlumno, int nota, long idAsignatura) throws AlumnoNotFoundException, AsignaturaInexistenteException, NotaIncorrectaException, CorrelatividadesNoAprobadasException;
 
-    void perderRegularidadAsignatura(long idAlumno, int idAsignatura);
+    void perderRegularidadAsignatura(long idAlumno, long idAsignatura);
 
     EstadoAsignatura getEstadoAsignaturaPorId(long idAlumno, long idAsignatura) throws AlumnoNotFoundException,
             AsignaturaInexistenteException;

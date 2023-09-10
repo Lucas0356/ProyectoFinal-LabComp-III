@@ -12,14 +12,13 @@ import ar.edu.utn.frbb.tup.model.dto.AsignaturaDto;
 import ar.edu.utn.frbb.tup.model.exception.AsignaturaInexistenteException;
 import ar.edu.utn.frbb.tup.model.exception.CorrelatividadesNoAprobadasException;
 import ar.edu.utn.frbb.tup.model.exception.EstadoIncorrectoException;
+import ar.edu.utn.frbb.tup.persistence.exception.NotaIncorrectaException;
 import ar.edu.utn.frbb.tup.persistence.AlumnoDao;
 import ar.edu.utn.frbb.tup.persistence.exception.AlumnoNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-
-import static ar.edu.utn.frbb.tup.model.EstadoAsignatura.CURSADA;
 
 @Component
 public class AlumnoServiceImpl implements AlumnoService {
@@ -175,7 +174,7 @@ public class AlumnoServiceImpl implements AlumnoService {
     @Override
     public void modificarAsignatura(long idAlumno, long idAsignatura, AsignaturaDto asignaturaDto)
             throws AsignaturaInexistenteException, AlumnoNotFoundException, EstadoIncorrectoException,
-            CorrelatividadesNoAprobadasException {
+            CorrelatividadesNoAprobadasException, NotaIncorrectaException {
 
         // Guardamos el estado a aplicar en la asignatura
         EstadoAsignatura estadoAAsignar = asignaturaDto.getEstadoAsignatura();
@@ -188,7 +187,7 @@ public class AlumnoServiceImpl implements AlumnoService {
                 asignaturaService.cursarAsignatura(idAlumno, idAsignatura, asignaturaDto);
                 break;
             case APROBADA:
-                aprobarAsignatura(idAsignatura, asignaturaDto.getNota() ,idAlumno);
+                asignaturaService.aprobarAsignatura(idAlumno, asignaturaDto.getNota(), idAsignatura);
                 break;
         }
     }

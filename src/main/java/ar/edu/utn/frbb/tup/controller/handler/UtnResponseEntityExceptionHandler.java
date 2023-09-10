@@ -1,6 +1,9 @@
 package ar.edu.utn.frbb.tup.controller.handler;
 
 import ar.edu.utn.frbb.tup.business.exceptions.*;
+import ar.edu.utn.frbb.tup.model.exception.CorrelatividadesNoAprobadasException;
+import ar.edu.utn.frbb.tup.model.exception.EstadoIncorrectoException;
+import ar.edu.utn.frbb.tup.persistence.exception.NotaIncorrectaException;
 import ar.edu.utn.frbb.tup.persistence.exception.AlumnoNotFoundException;
 import ar.edu.utn.frbb.tup.persistence.exception.ProfesorNotFoundException;
 import org.springframework.http.HttpHeaders;
@@ -41,7 +44,8 @@ public class UtnResponseEntityExceptionHandler extends ResponseEntityExceptionHa
     // TituloInvalidoException, IdInvalidoException, etc)
     @ExceptionHandler(value = {NombreInvalidoException.class, ApellidoInvalidoException.class,
             TituloInvalidoException.class, IdInvalidoException.class, NumeroInvalidoException.class,
-            AnioInvalidoException.class, CuatrimestreInvalidoException.class, DniInvalidoException.class})
+            AnioInvalidoException.class, CuatrimestreInvalidoException.class, DniInvalidoException.class,
+            NotaIncorrectaException.class, EstadoIncorrectoException.class, CorrelatividadesNoAprobadasException.class})
     protected ResponseEntity<Object> handleInvalidArguments(Exception ex, WebRequest request) {
         String exceptionMessage = ex.getMessage();
         CustomApiError error = new CustomApiError();

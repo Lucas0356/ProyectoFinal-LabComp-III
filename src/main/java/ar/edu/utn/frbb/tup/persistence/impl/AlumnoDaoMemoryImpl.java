@@ -4,6 +4,9 @@ import ar.edu.utn.frbb.tup.model.*;
 import ar.edu.utn.frbb.tup.model.dto.AlumnoDto;
 import ar.edu.utn.frbb.tup.model.dto.AsignaturaDto;
 import ar.edu.utn.frbb.tup.model.exception.AsignaturaInexistenteException;
+import ar.edu.utn.frbb.tup.model.exception.CorrelatividadesNoAprobadasException;
+import ar.edu.utn.frbb.tup.model.exception.EstadoIncorrectoException;
+import ar.edu.utn.frbb.tup.persistence.exception.NotaIncorrectaException;
 import ar.edu.utn.frbb.tup.persistence.AlumnoDao;
 import ar.edu.utn.frbb.tup.persistence.exception.AlumnoNotFoundException;
 import org.springframework.stereotype.Service;
@@ -12,6 +15,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static ar.edu.utn.frbb.tup.model.EstadoAsignatura.*;
 
 
 @Service
@@ -103,22 +108,41 @@ public class AlumnoDaoMemoryImpl implements AlumnoDao {
     @Override
     public void cursarAsignatura(long idAlumno, long idAsignatura, AsignaturaDto asignaturaDto) throws AlumnoNotFoundException,
             AsignaturaInexistenteException {
-        // Buscamos al alumno
-        Alumno alumno = findAlumno(idAlumno);
 
         // Buscamos la asignatura por su id
         Asignatura asignaturaActual = getAsignaturaPorId(idAlumno, idAsignatura);
 
-        // Invocamos su método para actualizar la asignatura
-        alumno.cursarAsignatura(asignaturaActual);
+        if (asignaturaActual.getEstado() == NO_CURSADA) {
+            // Actualiza el estado de la asignatura existente con la nueva información
+            asignaturaActual.setEstado(CURSADA);
+        }
     }
 
     @Override
-    public void aprobarAsignatura(long idAlumno, int idAsignatura, int nota) {
+    public void aprobarAsignatura(long idAlumno, int nota, long idAsignatura)
+            throws AlumnoNotFoundException, AsignaturaInexistenteException, NotaIncorrectaException,
+            CorrelatividadesNoAprobadasException {
+
+        // Buscamos la asignatura por su id
+        Asignatura asignaturaActual = getAsignaturaPorId(idAlumno, idAsignatura);
+
+        if (asignaturaActual.getEstado() != CURSADA) {
+            throw new EstadoIncorrectoException("La materia debe estar CURSADA para poder aprobarse.");
+        }
+        if (nota < 6){
+            throw new NotaIncorrectaException("La nota debe ser mayor o igual a 6 para aprobarla");
+        }
+
+        // Verificamos las correlativas en un método privado
+        verificarCorrelativas(idAlumno, asignaturaActual);
+
+        asignaturaActual.setEstado(APROBADA);
+        asignaturaActual.setNota(nota);
     }
 
     @Override
-    public void perderRegularidadAsignatura(long idAlumno, int idAsignatura) {
+    public void perderRegularidadAsignatura(long idAlumno, long idAsignatura) {
+
     }
 
     @Override
@@ -167,6 +191,21 @@ public class AlumnoDaoMemoryImpl implements AlumnoDao {
             throw new AlumnoNotFoundException("No se encontró ningún alumno con el id " + idAlumno);
         }
     }
+
+    private void verificarCorrelativas(long idAlumno, Asignatura asignatura) throws AlumnoNotFoundException, CorrelatividadesNoAprobadasException {
+        Alumno alumno = findAlumno(idAlumno);
+        List<Integer> listaCorrelatividades = asignatura.getMateria().getCorrelatividades();
+
+        // Verificamos si el alumno ha aprobado todas las correlativas requeridas
+        for (Integer correlativaId : listaCorrelatividades) {
+            if (!alumno.haAprobadoAsignatura(correlativaId)) {
+                // Si no ha aprobado una correlativa, retornamos una exception
+                throw new CorrelatividadesNoAprobadasException("No puede aprobar la asignatura puesto que aún no " +
+                        "aprobó la asignatura con id " + correlativaId);
+            }
+        }
+    }
+
 
     // ----------------------------------------------------------------
 }

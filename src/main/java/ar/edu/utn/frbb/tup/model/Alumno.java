@@ -153,6 +153,39 @@ public class Alumno {
         throw new AsignaturaInexistenteException("La asignatura con ID " + idAsignatura + " no existe para este alumno.");
     }
 
+    public void aprobarAsignatura(Asignatura asignaturaActual, int nota) throws AsignaturaInexistenteException {
+
+        // Buscamos el id de la asignatura a actualizar
+        long idAsignatura = asignaturaActual.getMateria().getMateriaId();
+
+        // Buscamos la asignatura actual en la lista de asignaturas del alumno
+        for (Asignatura asignatura : asignaturas) {
+            if (asignatura.getMateria().getMateriaId() == idAsignatura) {
+
+                if (asignatura.getEstado() == NO_CURSADA) {
+                    // Actualiza el estado de la asignatura existente con la nueva información
+                    asignatura.setEstado(CURSADA);
+                }
+
+                return;
+            }
+        }
+
+        // Si no se encuentra la asignatura, lanza una excepción
+        throw new AsignaturaInexistenteException("La asignatura con ID " + idAsignatura + " no existe para este alumno.");
+    }
+
+    public boolean haAprobadoAsignatura(Integer correlativaId) {
+        for (Asignatura asignatura : asignaturas) {
+            if (asignatura.getMateria().getMateriaId() == correlativaId &&
+                    asignatura.getEstado() == EstadoAsignatura.APROBADA) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
     // ------------------------------------------------------------------------
 
 }

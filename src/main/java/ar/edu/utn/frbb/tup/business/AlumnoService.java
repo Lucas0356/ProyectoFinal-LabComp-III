@@ -8,6 +8,7 @@ import ar.edu.utn.frbb.tup.model.dto.AsignaturaDto;
 import ar.edu.utn.frbb.tup.model.exception.AsignaturaInexistenteException;
 import ar.edu.utn.frbb.tup.model.exception.CorrelatividadesNoAprobadasException;
 import ar.edu.utn.frbb.tup.model.exception.EstadoIncorrectoException;
+import ar.edu.utn.frbb.tup.persistence.exception.NotaIncorrectaException;
 import ar.edu.utn.frbb.tup.persistence.exception.AlumnoNotFoundException;
 import ar.edu.utn.frbb.tup.persistence.exception.MateriaNotFoundException;
 
@@ -44,7 +45,7 @@ public interface AlumnoService {
     void actualizarAsignaturasAlumnos(Materia materia);
 
     void modificarAsignatura(long idAlumno, long idAsignatura, AsignaturaDto asignaturaDto)
-            throws AsignaturaInexistenteException, AlumnoNotFoundException, EstadoIncorrectoException, CorrelatividadesNoAprobadasException;
+            throws AsignaturaInexistenteException, AlumnoNotFoundException, EstadoIncorrectoException, CorrelatividadesNoAprobadasException, NotaIncorrectaException;
 
     // ------------------------------------------------------------------------
 

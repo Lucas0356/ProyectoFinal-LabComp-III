@@ -107,49 +107,7 @@ public class AlumnoServiceImpl implements AlumnoService {
 
     // ------------------------------------------------------------------------
 
-    // Aprobar, cursar, perder regularidad asignatura -------------------------
-
-    @Override
-    public void aprobarAsignatura(long idAsignatura, int nota, long idAlumno)
-            throws AsignaturaInexistenteException, AlumnoNotFoundException, CorrelatividadesNoAprobadasException,
-            EstadoIncorrectoException {
-
-        // Obtenemos la asignatura a aprobar
-        Asignatura asignaturaParaAprobar = asignaturaService.buscarAsignatura(idAsignatura, idAlumno);
-
-        for (int idCorrelativa : asignaturaParaAprobar.getMateria().getCorrelatividades()) {
-            // Buscamos la correlativa
-            Asignatura correlativa = asignaturaService.buscarAsignatura(idCorrelativa, idAlumno);
-            // Verificamos que tenga aprobada la correlativa
-            if (!EstadoAsignatura.APROBADA.equals(correlativa.getEstado())) {
-                throw new CorrelatividadesNoAprobadasException("La materia " + correlativa.getMateria().getNombre()
-                        + " debe estar aprobada para aprobar " + asignaturaParaAprobar.getNombreAsignatura());
-            }
-        }
-
-        // Aprobar la asignatura con la nota proporcionada
-        asignaturaParaAprobar.aprobarAsignatura(nota);
-
-        // Actualizar la asignatura en el servicio correspondiente
-        //asignaturaService.actualizarAsignatura(asignaturaParaAprobar);
-
-        // Actualizar el registro del alumno
-        Alumno alumno = alumnoDao.findAlumno(idAlumno);
-        // alumno.actualizarAsignatura(asignaturaParaAprobar);
-
-        // Guardar los cambios en el alumno
-        // alumnoDao.saveAlumno(alumno);
-    }
-
-    @Override
-    public void perderRegularidadAsignatura(long idAlumno, long idAsignatura)
-            throws EstadoIncorrectoException {
-
-    }
-
-    // ------------------------------------------------------------------------
-
-    // Otros métodos relacionados con asignatura ------------------------------
+    // Métodos relacionados con asignatura ------------------------------
 
     @Override
     public EstadoAsignatura buscarEstadoAsignatura(long idAlumno, long idAsignatura)
@@ -181,10 +139,10 @@ public class AlumnoServiceImpl implements AlumnoService {
 
         switch (estadoAAsignar){
             case NO_CURSADA:
-                perderRegularidadAsignatura(idAlumno, idAsignatura);
+                asignaturaService.perderRegularidadAsignatura(idAlumno, idAsignatura);
                 break;
             case CURSADA:
-                asignaturaService.cursarAsignatura(idAlumno, idAsignatura, asignaturaDto);
+                asignaturaService.cursarAsignatura(idAlumno, idAsignatura);
                 break;
             case APROBADA:
                 asignaturaService.aprobarAsignatura(idAlumno, asignaturaDto.getNota(), idAsignatura);
@@ -248,24 +206,3 @@ public class AlumnoServiceImpl implements AlumnoService {
 
     // ------------------------------------------------------------------------
 }
-
-
-
-    /*
-    @Override
-    public void aprobarAsignatura(int materiaId, int nota, long dni) throws EstadoIncorrectoException, CorrelatividadesNoAprobadasException {
-        Asignatura a = asignaturaService.getAsignatura(materiaId, dni);
-        for (Materia m:
-             a.getMateria().getCorrelatividades()) {
-            Asignatura correlativa = asignaturaService.getAsignatura(m.getMateriaId(), dni);
-            if (!EstadoAsignatura.APROBADA.equals(correlativa.getEstado())) {
-                throw new CorrelatividadesNoAprobadasException("La materia " + m.getNombre() + " debe estar aprobada para aprobar " + a.getNombreAsignatura());
-            }
-        }
-        a.aprobarAsignatura(nota);
-        asignaturaService.actualizarAsignatura(a);
-        Alumno alumno = alumnoDao.loadAlumno(dni);
-        alumno.actualizarAsignatura(a);
-        alumnoDao.saveAlumno(alumno);
-    }
-    */

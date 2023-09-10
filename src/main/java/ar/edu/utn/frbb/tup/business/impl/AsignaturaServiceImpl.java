@@ -23,16 +23,19 @@ public class AsignaturaServiceImpl implements AsignaturaService {
     // ------------------------------------------------------------------------
 
     @Override
-    public void perderRegularidadAsignatura(long idAlumno, long idAsignatura){
+    public void perderRegularidadAsignatura(long idAlumno, long idAsignatura)
+            throws AsignaturaInexistenteException, AlumnoNotFoundException {
 
+        // Perdemos regularidad de la materia
+        alumnoDao.perderRegularidadAsignatura(idAlumno, idAsignatura);
     }
 
     @Override
-    public void cursarAsignatura(long idAlumno, long idAsignatura, AsignaturaDto asignaturaDto)
+    public void cursarAsignatura(long idAlumno, long idAsignatura)
             throws AsignaturaInexistenteException, AlumnoNotFoundException {
 
         // Cursamos la materia
-        alumnoDao.cursarAsignatura(idAlumno, idAsignatura, asignaturaDto);
+        alumnoDao.cursarAsignatura(idAlumno, idAsignatura);
     }
 
     @Override
@@ -41,12 +44,6 @@ public class AsignaturaServiceImpl implements AsignaturaService {
 
         // Aprobamos la materia
         alumnoDao.aprobarAsignatura(idAlumno, nota, idAsignatura);
-
-    }
-
-    @Override
-    public Asignatura modAsignatura(int asignaturaID, Alumno alumno) {
-        return null;
     }
 
     @Override

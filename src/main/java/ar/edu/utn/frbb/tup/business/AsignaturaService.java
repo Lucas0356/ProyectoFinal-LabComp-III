@@ -12,11 +12,9 @@ public interface AsignaturaService {
 
     // Modificar Asignatura ----------------------------------------------------
 
-    Asignatura modAsignatura(int asignaturaID, Alumno alumno);
+    void perderRegularidadAsignatura(long idAlumno, long idAsignatura) throws AsignaturaInexistenteException, AlumnoNotFoundException;
 
-    void perderRegularidadAsignatura(long idAlumno, long idAsignatura);
-
-    void cursarAsignatura(long idAlumno, long idAsignatura, AsignaturaDto asignaturaDto) throws AsignaturaInexistenteException, AlumnoNotFoundException;
+    void cursarAsignatura(long idAlumno, long idAsignatura) throws AsignaturaInexistenteException, AlumnoNotFoundException;
 
     void aprobarAsignatura(long idAlumno, int nota, long asignaturaDto) throws AsignaturaInexistenteException, AlumnoNotFoundException, NotaIncorrectaException, CorrelatividadesNoAprobadasException;
 

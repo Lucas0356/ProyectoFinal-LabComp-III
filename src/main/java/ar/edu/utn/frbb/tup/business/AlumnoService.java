@@ -28,16 +28,7 @@ public interface AlumnoService {
 
     // ------------------------------------------------------------------------
 
-    // Aprobar, cursar, perder regularidad asignatura -------------------------
-
-    void aprobarAsignatura(long idAsignatura, int nota, long idAlumno)
-            throws EstadoIncorrectoException, CorrelatividadesNoAprobadasException, AsignaturaInexistenteException, AlumnoNotFoundException, MateriaNotFoundException;
-
-    void perderRegularidadAsignatura(long idAlumno, long idAsignatura) throws EstadoIncorrectoException;
-
-    // ------------------------------------------------------------------------
-
-    // Otros métodos relacionados con asignatura ------------------------------
+    // Métodos relacionados con asignatura ------------------------------
 
     EstadoAsignatura buscarEstadoAsignatura(long idAlumno, long idAsignatura)
             throws AlumnoNotFoundException, AsignaturaInexistenteException;

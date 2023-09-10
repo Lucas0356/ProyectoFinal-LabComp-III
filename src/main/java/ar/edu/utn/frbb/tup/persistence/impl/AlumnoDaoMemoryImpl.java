@@ -106,16 +106,18 @@ public class AlumnoDaoMemoryImpl implements AlumnoDao {
     // Métodos para operaciones relacionadas con asignaturas ----------
 
     @Override
-    public void cursarAsignatura(long idAlumno, long idAsignatura, AsignaturaDto asignaturaDto) throws AlumnoNotFoundException,
+    public void cursarAsignatura(long idAlumno, long idAsignatura) throws AlumnoNotFoundException,
             AsignaturaInexistenteException {
 
         // Buscamos la asignatura por su id
         Asignatura asignaturaActual = getAsignaturaPorId(idAlumno, idAsignatura);
 
-        if (asignaturaActual.getEstado() == NO_CURSADA) {
-            // Actualiza el estado de la asignatura existente con la nueva información
-            asignaturaActual.setEstado(CURSADA);
+        if (asignaturaActual.getEstado() != NO_CURSADA) {
+            throw new EstadoIncorrectoException("La materia ya está cursada o aprobada");
         }
+
+        // Cursamos la asignatura
+        asignaturaActual.setEstado(CURSADA);
     }
 
     @Override
@@ -129,8 +131,8 @@ public class AlumnoDaoMemoryImpl implements AlumnoDao {
         if (asignaturaActual.getEstado() != CURSADA) {
             throw new EstadoIncorrectoException("La materia debe estar CURSADA para poder aprobarse.");
         }
-        if (nota < 6){
-            throw new NotaIncorrectaException("La nota debe ser mayor o igual a 6 para aprobarla");
+        if (nota < 6 || nota > 10  ){
+            throw new NotaIncorrectaException("La nota debe estar entre 6 y 10 para poder aprobarse");
         }
 
         // Verificamos las correlativas en un método privado
@@ -141,8 +143,18 @@ public class AlumnoDaoMemoryImpl implements AlumnoDao {
     }
 
     @Override
-    public void perderRegularidadAsignatura(long idAlumno, long idAsignatura) {
+    public void perderRegularidadAsignatura(long idAlumno, long idAsignatura)
+            throws AsignaturaInexistenteException, AlumnoNotFoundException {
 
+        // Buscamos la asignatura por su id
+        Asignatura asignaturaActual = getAsignaturaPorId(idAlumno, idAsignatura);
+
+        if (asignaturaActual.getEstado() == NO_CURSADA) {
+            throw new EstadoIncorrectoException("La materia ya está no cursada");
+        }
+
+        // Perdemos la regularidad de la asignatura
+        asignaturaActual.setEstado(NO_CURSADA);
     }
 
     @Override

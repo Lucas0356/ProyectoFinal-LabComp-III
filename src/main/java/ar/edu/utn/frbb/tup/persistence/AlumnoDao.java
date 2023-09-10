@@ -29,12 +29,12 @@ public interface AlumnoDao {
 
     // Métodos para operaciones relacionadas con asignaturas ----------
 
-    void cursarAsignatura(long idAlumno, long idAsignatura, AsignaturaDto nuevaAsignatura)
+    void cursarAsignatura(long idAlumno, long idAsignatura)
             throws AlumnoNotFoundException, AsignaturaInexistenteException;
 
     void aprobarAsignatura(long idAlumno, int nota, long idAsignatura) throws AlumnoNotFoundException, AsignaturaInexistenteException, NotaIncorrectaException, CorrelatividadesNoAprobadasException;
 
-    void perderRegularidadAsignatura(long idAlumno, long idAsignatura);
+    void perderRegularidadAsignatura(long idAlumno, long idAsignatura) throws AsignaturaInexistenteException, AlumnoNotFoundException;
 
     EstadoAsignatura getEstadoAsignaturaPorId(long idAlumno, long idAsignatura) throws AlumnoNotFoundException,
             AsignaturaInexistenteException;

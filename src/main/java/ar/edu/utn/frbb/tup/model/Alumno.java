@@ -26,6 +26,14 @@ public class Alumno {
     public Alumno() {
     }
 
+    public Alumno(long id, String nombre, String apellido, long dni, List<Asignatura> asignaturas) {
+        this.id = id;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.dni = dni;
+        this.asignaturas = asignaturas;
+    }
+
     // ------------------------------------------------------------------------
 
     // Getters y Setters ------------------------------------------------------

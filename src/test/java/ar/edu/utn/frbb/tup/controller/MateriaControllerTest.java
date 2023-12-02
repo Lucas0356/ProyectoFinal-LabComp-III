@@ -1,0 +1,110 @@
+// Importación de paquetes y clases necesarios
+package ar.edu.utn.frbb.tup.controller;
+
+import ar.edu.utn.frbb.tup.business.AlumnoService;
+import ar.edu.utn.frbb.tup.business.MateriaService;
+import ar.edu.utn.frbb.tup.model.Materia;
+import ar.edu.utn.frbb.tup.model.dto.MateriaDto;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+// Extensión de Spring para ejecutar pruebas de integración
+@ExtendWith(SpringExtension.class)
+public class MateriaControllerTest {
+
+    // Instancia del controlador que está siendo probada
+    @InjectMocks
+    MateriaController materiaController;
+
+    // Servicio simulado con Mockito para gestionar Materia
+    @Mock
+    MateriaService materiaService;
+
+    // Servicio simulado con Mockito para gestionar Alumno
+    @Mock
+    AlumnoService alumnoService;
+
+    // Instancia de MockMvc utilizada para simular solicitudes HTTP
+    MockMvc mockMvc;
+
+    // ObjectMapper para convertir objetos a JSON y viceversa
+    private static final ObjectMapper mapper = new ObjectMapper();
+
+    // Configuración previa a cada prueba
+    @BeforeEach
+    public void setUp() {
+        // Configurar MockMvc con el controlador a probar
+        this.mockMvc = MockMvcBuilders.standaloneSetup(materiaController).build();
+    }
+
+    // Prueba del método crearMateria en el controlador
+    @Test
+    public void crearMateriaTest() throws Exception {
+        // Configurar el comportamiento del servicio de materia al llamar a crearMateria
+        // Se especifica que, al recibir cualquier objeto MateriaDto como argumento, debe devolver una nueva instancia de Materia.
+        Mockito.when(materiaService.crearMateria(any(MateriaDto.class))).thenReturn(new Materia());
+
+        // Configura el comportamiento simulado para el servicio de Alumno
+        // Simula que no se realiza ninguna acción al llamar a actualizarAsignaturasAlumnos en el servicio de Alumno.
+        Mockito.doNothing().when(alumnoService).actualizarAsignaturasAlumnos(any(Materia.class));
+
+        // Crear un objeto MateriaDto para la solicitud
+        MateriaDto materiaDto = new MateriaDto();
+        materiaDto.setAnio(2);
+        materiaDto.setCuatrimestre(1);
+        materiaDto.setNombre("Laboratorio III");
+        materiaDto.setProfesorId(1);
+
+        // Realizar una solicitud HTTP POST y esperar un estado de éxito (2xx)
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/materia")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(materiaDto))
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().is2xxSuccessful())
+                .andReturn();
+
+        // Verificar que la respuesta coincide con una nueva instancia de Materia
+        Assertions.assertEquals(new Materia(), mapper.readValue(result.getResponse().getContentAsString(), Materia.class));
+
+        // Verifica que el método actualizarAsignaturasAlumnos fue llamado
+        // Esto debido a que cuando agregamos una materia, también se la agregamos a todos los alumnos existentes
+        Mockito.verify(alumnoService).actualizarAsignaturasAlumnos(any(Materia.class));
+    }
+
+    // Prueba de la gestión de errores para una solicitud con formato incorrecto
+    @Test
+    public void testCrearMateriaBadRequest2() throws Exception {
+        // Configurar el comportamiento del servicio de materia al llamar a crearMateria
+        Mockito.when(materiaService.crearMateria(any(MateriaDto.class))).thenReturn(new Materia());
+
+        // Simula una solicitud con formato incorrecto al enviar el año y cuatrimestre
+        // como cadenas de texto en lugar de valores numéricos. Esperando un estado de error (bad request)
+        mockMvc.perform(MockMvcRequestBuilders.post("/materia")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\n" +
+                                "    \"nombre\" : \"Laboratorio III\",\n" +
+                                "    \"anio\" : \"segundo\", \n" +
+                                "    \"cuatrimestre\" : primero,\n" +
+                                "    \"profesorId\" : 1,\n"+
+                                "    \"correlatividades\": []"+
+                                "}")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
+}

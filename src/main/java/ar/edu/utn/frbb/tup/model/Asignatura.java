@@ -36,20 +36,12 @@ public class Asignatura {
         this.materia = materia;
     }
 
-    public String getNombreAsignatura(){
-        return this.materia.getNombre();
-    }
-
     public EstadoAsignatura getEstado() {
         return estado;
     }
 
     public void setEstado(EstadoAsignatura estado) {
         this.estado = estado;
-    }
-
-    public Optional<Integer> getNota() {
-        return Optional.ofNullable(nota);
     }
 
     public void setNota(int nota) {

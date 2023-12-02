@@ -51,16 +51,8 @@ public class Materia {
         this.nombre = nombre;
     }
 
-    public int getAnio() {
-        return anio;
-    }
-
     public void setAnio(int anio) {
         this.anio = anio;
-    }
-
-    public int getCuatrimestre() {
-        return cuatrimestre;
     }
 
     public void setCuatrimestre(int cuatrimestre) {

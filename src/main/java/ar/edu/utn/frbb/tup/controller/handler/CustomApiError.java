@@ -9,8 +9,6 @@ public class CustomApiError {
     private Integer errorCode;
     private String errorMessage;
 
-
-
     public Integer getErrorCode() {
         return errorCode;
     }

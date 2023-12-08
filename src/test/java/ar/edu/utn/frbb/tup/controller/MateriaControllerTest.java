@@ -6,7 +6,6 @@ import ar.edu.utn.frbb.tup.business.MateriaService;
 import ar.edu.utn.frbb.tup.model.Materia;
 import ar.edu.utn.frbb.tup.model.dto.MateriaDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,6 +19,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -52,11 +52,12 @@ public class MateriaControllerTest {
         this.mockMvc = MockMvcBuilders.standaloneSetup(materiaController).build();
     }
 
-    // Prueba del método crearMateria en el controlador
+    // Prueba del método crearMateria
     @Test
     public void crearMateriaTest() throws Exception {
         // Configurar el comportamiento del servicio de materia al llamar a crearMateria
-        // Se especifica que, al recibir cualquier objeto MateriaDto como argumento, debe devolver una nueva instancia de Materia.
+        // Se especifica que, al recibir cualquier objeto MateriaDto como argumento,
+        // debe devolver una nueva instancia de Materia.
         Mockito.when(materiaService.crearMateria(any(MateriaDto.class))).thenReturn(new Materia());
 
         // Configura el comportamiento simulado para el servicio de Alumno
@@ -79,16 +80,16 @@ public class MateriaControllerTest {
                 .andReturn();
 
         // Verificar que la respuesta coincide con una nueva instancia de Materia
-        Assertions.assertEquals(new Materia(), mapper.readValue(result.getResponse().getContentAsString(), Materia.class));
+        assertEquals(new Materia(), mapper.readValue(result.getResponse().getContentAsString(), Materia.class));
 
         // Verifica que el método actualizarAsignaturasAlumnos fue llamado
         // Esto debido a que cuando agregamos una materia, también se la agregamos a todos los alumnos existentes
         Mockito.verify(alumnoService).actualizarAsignaturasAlumnos(any(Materia.class));
     }
 
-    // Prueba de la gestión de errores para una solicitud con formato incorrecto
+    // Prueba del método crearMateria cuando se realiza una solicitud con formato incorrecto
     @Test
-    public void testCrearMateriaBadRequest2() throws Exception {
+    public void crearMateriaBadRequestTest() throws Exception {
         // Configurar el comportamiento del servicio de materia al llamar a crearMateria
         Mockito.when(materiaService.crearMateria(any(MateriaDto.class))).thenReturn(new Materia());
 
@@ -107,4 +108,26 @@ public class MateriaControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
+    // Prueba del método buscarMateria
+    @Test
+    public void buscarMateriaTest() throws Exception {
+        // Crear una instancia de Materia para simular el resultado del servicio
+        Materia materia = new Materia();
+
+        // Configurar el comportamiento del servicio de materia al llamar a buscarMateria
+        Mockito.when(materiaService.buscarMateria(any(Integer.class))).thenReturn(materia);
+
+        // Configurar el controlador para la prueba
+        this.mockMvc = MockMvcBuilders.standaloneSetup(materiaController).build();
+
+        // Realizar una solicitud HTTP GET para buscar una materia por su ID y esperar un estado de éxito (2xx)
+        mockMvc.perform(MockMvcRequestBuilders.get("/materia/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        // Verificar que la respuesta coincide con la materia devuelta por el servicio
+        assertEquals(materia, materiaController.buscarMateria(1));
+    }
 }

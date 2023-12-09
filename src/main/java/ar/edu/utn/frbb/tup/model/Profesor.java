@@ -80,6 +80,10 @@ public class Profesor {
         return this.materiasDictadas;
     }
 
-    // ------------------------------------------------------------------------
+    public void setMateriasDictadas(List<Integer> materiasDictadas) {
+        this.materiasDictadas = materiasDictadas;
+    }
+
+// ------------------------------------------------------------------------
 
 }

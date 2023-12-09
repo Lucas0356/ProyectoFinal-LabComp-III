@@ -28,14 +28,6 @@ public class MateriaServiceImpl implements MateriaService {
 
     // ------------------------------------------------------------------------
 
-    // Constructor ------------------------------------------------------------
-
-    public MateriaServiceImpl(MateriaDao materiaDao) {
-        this.materiaDao = materiaDao;
-    }
-
-    // ------------------------------------------------------------------------
-
     // Métodos para operaciones CRUD de Materia -------------------------------
 
     @Override

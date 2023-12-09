@@ -18,12 +18,6 @@ public interface MateriaDao {
 
     // ----------------------------------------------------------------
 
-    // Métodos para operaciones relacionadas con correlatividades -----
-
-    void agregarCorrelatividad(int idMateria, int idCorrelatividad);
-
-    // ----------------------------------------------------------------
-
     // Método auxiliar para obtener todas las materias  ---------------
 
     public List<Materia> obtenerTodasLasMaterias();

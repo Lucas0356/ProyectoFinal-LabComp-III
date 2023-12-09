@@ -4,7 +4,6 @@ import ar.edu.utn.frbb.tup.business.AlumnoService;
 import ar.edu.utn.frbb.tup.business.AsignaturaService;
 import ar.edu.utn.frbb.tup.business.exceptions.*;
 import ar.edu.utn.frbb.tup.model.Alumno;
-import ar.edu.utn.frbb.tup.model.Asignatura;
 import ar.edu.utn.frbb.tup.model.EstadoAsignatura;
 import ar.edu.utn.frbb.tup.model.Materia;
 import ar.edu.utn.frbb.tup.model.dto.AlumnoDto;
@@ -30,14 +29,6 @@ public class AlumnoServiceImpl implements AlumnoService {
 
     @Autowired
     private AsignaturaService asignaturaService;
-
-    // ------------------------------------------------------------------------
-
-    // Constructor ------------------------------------------------------------
-
-    public AlumnoServiceImpl(AlumnoDao alumnoDao) {
-        this.alumnoDao = alumnoDao;
-    }
 
     // ------------------------------------------------------------------------
 

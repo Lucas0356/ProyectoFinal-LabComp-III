@@ -54,8 +54,16 @@ public class Alumno {
         this.nombre = nombre;
     }
 
+    public String getApellido() {
+        return apellido;
+    }
+
     public void setApellido(String apellido) {
         this.apellido = apellido;
+    }
+
+    public long getDni() {
+        return dni;
     }
 
     public void setDni(long dni) {
@@ -111,7 +119,6 @@ public class Alumno {
         }
         return false;
     }
-
 
     // ------------------------------------------------------------------------
 

@@ -29,14 +29,6 @@ public class ProfesorServiceImpl implements ProfesorService {
 
     // ------------------------------------------------------------------------
 
-    // Constructor ------------------------------------------------------------
-
-    public ProfesorServiceImpl(ProfesorDao profesorDao) {
-        this.profesorDao = profesorDao;
-    }
-
-    // ------------------------------------------------------------------------
-
     // Métodos para operaciones CRUD de Profesor ------------------------------
 
     @Override

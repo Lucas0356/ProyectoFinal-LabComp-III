@@ -44,6 +44,10 @@ public class Asignatura {
         this.estado = estado;
     }
 
+    public Integer getNota() {
+        return nota;
+    }
+
     public void setNota(int nota) {
         this.nota = nota;
     }

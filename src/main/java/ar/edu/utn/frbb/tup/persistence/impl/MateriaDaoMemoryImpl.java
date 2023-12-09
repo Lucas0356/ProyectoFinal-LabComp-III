@@ -59,14 +59,6 @@ public class MateriaDaoMemoryImpl implements MateriaDao {
 
     // ----------------------------------------------------------------
 
-    // Métodos para operaciones relacionadas con correlatividades -----
-
-    @Override
-    public void agregarCorrelatividad(int idMateria, int idCorrelatividad) {
-    }
-
-    // ----------------------------------------------------------------
-
     // Método auxiliar para obtener todas las materias  ---------------
 
     @Override

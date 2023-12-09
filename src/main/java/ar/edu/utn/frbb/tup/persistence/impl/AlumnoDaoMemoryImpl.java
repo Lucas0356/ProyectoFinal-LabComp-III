@@ -204,9 +204,15 @@ public class AlumnoDaoMemoryImpl implements AlumnoDao {
         }
     }
 
-    private void verificarCorrelativas(long idAlumno, Asignatura asignatura) throws AlumnoNotFoundException, CorrelatividadesNoAprobadasException {
+    private void verificarCorrelativas(long idAlumno, Asignatura asignatura)
+            throws AlumnoNotFoundException, CorrelatividadesNoAprobadasException {
         Alumno alumno = findAlumno(idAlumno);
         List<Integer> listaCorrelatividades = asignatura.getMateria().getCorrelatividades();
+
+        // Verificamos si la lista de correlatividades es nula o vacía
+        if (listaCorrelatividades == null || listaCorrelatividades.isEmpty()) {
+            return;  // No hay correlatividades, no se requiere más verificación
+        }
 
         // Verificamos si el alumno ha aprobado todas las correlativas requeridas
         for (Integer correlativaId : listaCorrelatividades) {
